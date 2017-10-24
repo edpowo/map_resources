@@ -1,7 +1,7 @@
 title:		Mapping College Resources
 github:		https://github.com/edpowo/map_resources	
 site:		https://edpowo.github.io
-baseurl: 	'map_resources'
+baseurl: 	'/map_resources'
 
 highlighter:    rouge
 permalink:      pretty
