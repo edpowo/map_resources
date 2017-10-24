@@ -53,7 +53,7 @@ map.on('load', function () {
 	var data = null;
 	$.ajax({
 	    'async': false,
-	    'url': 'map_resources/data/schools.geojson',
+	    'url': '/map_resources/data/schools.geojson',
 	    'dataType': 'json',
 	    'success':  function(data) {
 		json = data;
