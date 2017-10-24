@@ -1,0 +1,7 @@
+
+_*
+!_layouts/
+!_includes/
+!_config.yml
+*.DS_Store
+*.Rhistory 
