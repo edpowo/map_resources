@@ -39,15 +39,17 @@ var visible = [];
 var messages = ['Zoom or drag the map to populate results',
 		'Check spelling or drag the map to re-populate results'];
 
-// get HTML elements for listing and filter bar
+// get HTML elements for listing, filter bar, and search bar
 var filterEl = document.getElementById('feature-filter');
 var listingEl = document.getElementById('feature-listing');
+var searchEl = document.getElementById('search-filter');
 
 // init filter to be hidden
 filterEl.parentNode.style.display = 'none';
 
 // init filtering switch
 var filterSwitch = false;
+var noFilterMatch = false;
 
 // GENERAL FUNCTIONS -------------------------------------------------
 
@@ -92,19 +94,43 @@ function renderListings(features) {
 
 	    // var schname = getProperty(s, a, id);
 	    var schname = s[feature.id].a;
-            var item = document.createElement('p');
+            var item = document.createElement('a');
 
-            item.textContent = schname;
-            item.addEventListener('mouseover', function() {
-                // add popup when mousing over
-                popup.setLngLat(feature.geometry.coordinates)
+	    item.href = '#';
+	    item.innerHTML = schname;
+
+	    // fly to and make active if clicked
+	    item.addEventListener('click', function() {
+
+		popup.remove();		
+
+		map.flyTo({
+		    center: feature.geometry.coordinates,
+		    zoom: 12
+		});
+
+		popup.setLngLat(feature.geometry.coordinates)
                     .setText(schname)
                     .addTo(map);
+		
+	    });
+
+	    // add popup when mousing over (if not active)
+            item.addEventListener('mouseover', function() {
+		// if (!item.style.hasClass('active')) {
+                    popup.setLngLat(feature.geometry.coordinates)
+			.setText(schname)
+			.addTo(map);
+		// }
             });
+	    
+	    // remove popup when mouse leaves (if not active)
 	    item.addEventListener('mouseleave', function() {
-                // remove popup on mouseleave
-                popup.remove();
+		// if (!item.style.hasClass('active')) {
+                    popup.remove();
+	//	}
             });
+	    
 	    
             listingEl.appendChild(item);
         });
@@ -123,6 +149,7 @@ function renderListings(features) {
 	    filterEl.style.color = getColor(rtorange);
 	    message = messages[1];
 	    listingEl.appendChild(empty);
+	    noFilterMatch = true;
 	} else {
 	    filterEl.parentNode.style.display = 'none';
 	    message = messages[0]
@@ -133,24 +160,6 @@ function renderListings(features) {
         // remove features filter
         map.setFilter('schools', ['has', '$id']);
     }
-}
-
-// only want unique items in the list
-function getUniqueFeatures(array, comparatorProperty) {
-
-    // init dictionary that will associate IDs with T/F
-    var existingFeatureKeys = {};
-
-    var uniqueFeatures = array.filter(function(el) {
-        if (existingFeatureKeys[el.properties[comparatorProperty]]) {
-            return false;
-        } else {
-            existingFeatureKeys[el.properties[comparatorProperty]] = true;
-            return true;
-        }
-    });
-
-    return uniqueFeatures;
 }
 
 // only want unique items in the list (by ID)
@@ -173,43 +182,46 @@ function getUniqueFeaturesByID(array) {
 
 function addToVisible() {
 
-    filterSwitch = false;
-    map.setFilter('schools', ['has', '$id']);
+    // reset if bad input in filter
+    if (noFilterMatch) {
+	noFilterMatch = false;
+	filterSwitch = false;
+	map.setFilter('schools', ['has', '$id']);
+    }
     
-    var features = map.queryRenderedFeatures({layers:['schools']});
+    var features = map.queryRenderedFeatures({layers:['schools']});   
     
     if (features) {
         var uniqueFeatures = getUniqueFeaturesByID(features, 'id');
-        // Populate features for the listing overlay.
+        // populate features for the listing overlay.
 	renderListings(uniqueFeatures);
-	
-        // Clear the input container
-        filterEl.value = '';
-	
-        // Store the current features in school variable to
-        // later use for filtering on `keyup`.
-	visible = uniqueFeatures;
+	// clear the input container only if !filterSwitch and reset visible
+	if (!filterSwitch) {
+	    filterEl.value = '';
+	    visible = uniqueFeatures;
+	}		
     }
 }
+
+// load data into memory
+var data = (function() {
+    var data = null;
+    $.ajax({
+	'async': false,
+	'url': '{{ site.baseurl }}/data/schools.geojson',
+	'dataType': 'json',
+	'success':  function(data) {
+	    json = data;
+	}
+    });
+    return json;
+})();
 
 // load map
 map.on('load', function () {
 
     // DATA ----------------------------------------------------------
-
-    var data = (function() {
-	var data = null;
-	$.ajax({
-	    'async': false,
-	    'url': '{{ site.baseurl }}/data/schools.geojson',
-	    'dataType': 'json',
-	    'success':  function(data) {
-		json = data;
-	    }
-	});
-	return json;
-    })();
-    
+  
     // add schools data
     map.addSource('schools', {
     	type: 'geojson',
@@ -243,14 +255,12 @@ map.on('load', function () {
     // SIDEBAR -------------------------------------------------------
 
     // add to visible variable on these events, which triggers sidebar
-    map.on('zoomstart', function() {
-	map.setFilter('schools', ['has', '$id']);
+    map.on('zoom', function() {
+	addToVisible();
     });
-    map.on('movestart', function() {
-	map.setFilter('schools', ['has', '$id']);
+    map.on('move', function() {
+	addToVisible();
     });
-    map.on('zoomend', addToVisible);
-    map.on('moveend', addToVisible);
 
     // POPUPS --------------------------------------------------------
 
@@ -272,9 +282,24 @@ map.on('load', function () {
 
     // Call this function on initialization
     // passing an empty array to render an empty state
-    renderListings(visible);
+    renderListings([]);
     
     // CONTROLS ------------------------------------------------------
+
+    // listingEl.addEventListener('click', function(e) {
+    // 	// Update the currentFeature to the store associated with the clicked link
+    // 	var clickedListing = data.features[this.dataPosition];
+    // 	// 1. Fly to the point associated with the clicked link
+    // 	flyToSchool(clickedListing);
+    // 	// 2. Close all other popups and display popup for clicked store
+    // 	// createPopUp(clickedListing);
+    // 	// 3. Highlight listing in sidebar (and remove highlight for all other listings)
+    // 	var activeItem = document.getElementsByClassName('active');
+    // 	if (activeItem[0]) {
+    // 	    activeItem[0].classList.remove('active');
+    // 	}
+    // 	this.parentNode.classList.add('active');
+    // });
 
     // filter box
     filterEl.addEventListener('keyup', function(e) {
@@ -282,23 +307,22 @@ map.on('load', function () {
 	filterSwitch = true;
 	
         var value = normalize(e.target.value);
-
+	
         // remove visible features that don't match the input value.
         var filtered = visible.filter(function(feature) {
             var name = normalize(s[feature.id].a);
-            // return name.indexOf(value) > -1 || code.indexOf(value) > -1;
-	    return name.indexOf(value) > -1
+            return name.indexOf(value) > -1;
         });
-
+	
         // populate the sidebar with filtered results
         renderListings(filtered);
-
+	
         // set the filter to populate features into the layer
         map.setFilter('schools', ['in', '$id'].concat(filtered.map(function(feature) {
             return feature.id;
         })));
 	popup.remove();
-
+	
     });
     
     // add geolocate control to the map.
