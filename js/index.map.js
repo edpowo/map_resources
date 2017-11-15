@@ -95,9 +95,13 @@ function renderListings(features) {
 	    // var schname = getProperty(s, a, id);
 	    var schname = s[feature.id].a;
             var item = document.createElement('a');
+	    
+	    // change bullet color based on whether HS or College
+	    var bulletcolor = (s[feature.id].c != undefined ? '#232D4B' : '#E57200');
 
 	    item.href = '#';
-	    item.innerHTML = schname;
+	    item.innerHTML = "<span class='bullet' style='color:" + bulletcolor
+		+ ";'>&bull;</span>" + schname;
 
 	    // fly to and make active if clicked
 	    item.addEventListener('click', function() {
@@ -324,6 +328,12 @@ map.on('load', function () {
 	popup.remove();
 	
     });
+
+    // add geocoder
+    map.addControl(new MapboxGeocoder({
+	accessToken: mapboxgl.accessToken,
+	country: 'US'
+    }));
     
     // add geolocate control to the map.
     map.addControl(new mapboxgl.GeolocateControl({
@@ -336,9 +346,8 @@ map.on('load', function () {
     	trackUserLocation: false
     }));
 
-    // Add zoom and rotation controls to the map.
+    // add zoom and rotation controls to the map.
     map.addControl(new mapboxgl.NavigationControl());
-
  
 });
 
