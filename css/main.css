@@ -110,10 +110,10 @@ and (min-width: 1024px) {
     margin: 0;
 }
 
-/* #feature-filter.col-sidebar fieldset { */
-/*     display: none; */
-/*     background-color: #E57200; */
-/* } */
+#feature-filter.col-sidebar fieldset {
+    display: none;
+    background-color: #E57200;
+}
 
 .col-sidebar input {
     display: block;
