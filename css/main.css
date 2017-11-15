@@ -110,10 +110,10 @@ and (min-width: 1024px) {
     margin: 0;
 }
 
-#feature-filter.col-sidebar fieldset {
-    display: none;
-    background-color: #E57200;
-}
+/* #feature-filter.col-sidebar fieldset { */
+/*     display: none; */
+/*     background-color: #E57200; */
+/* } */
 
 .col-sidebar input {
     display: block;
@@ -144,10 +144,12 @@ and (min-width: 1024px) {
     text-decoration: none;
 }
 
-.col-sidebar .listing a:last-child {
-    border: none;
-}
-
 .col-sidebar .listing a:hover {
     background: #f0f0f0;
+}
+
+.bullet {
+    font-size: 2rem;
+    padding-right: .5rem;
+    vertical-align: middle;
 }

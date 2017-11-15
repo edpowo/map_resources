@@ -13,9 +13,6 @@ custom_js:
 	<div class='col-sidebar col-tablet-sidebar'>
 		<div>
 			<fieldset>
-				<input id='search-filter' type='text' placeholder='TODO: Search for schools by name or location' />
-			</fieldset>
-			<fieldset style='background-color:#E57200;'>
 				<input id='feature-filter' type='text' placeholder='Filter results by name' />
 			</fieldset>
 		</div>	
