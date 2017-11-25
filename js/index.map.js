@@ -20,10 +20,15 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiYnRza2lubmVyIiwiYSI6ImNqOTRhbzk1M'
 // init map
 var map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/mapbox/{{ site.mapstyle }}',
+    style: 'mapbox://styles/mapbox/{{ site.mapstyle }}?optimize=true',
     center: [-96, 37.8],
     zoom: 4
 });
+
+// fit bounds based on screen view
+var bbox = [[-126.01318, 30.12227],
+	    [-65.91797, 48.00164]];
+map.fitBounds(bbox);
 
 // VARIABLES ---------------------------------------------------------
 
