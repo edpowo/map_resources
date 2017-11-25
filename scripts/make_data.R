@@ -118,6 +118,7 @@ hs <- read_csv(file.path(rdir, 'school_level_clean.csv')) %>%
 dist <- read_csv(file.path(rdir, 'district_level_clean.csv')) %>%
     setNames(tolower(names(.))) %>%
     select(nces_dist_id,
+           district_name,
            district_enrollment_grade12,
            district_frl_pct,
            district_stu_cou_ratio,
@@ -148,23 +149,24 @@ df <- bind_rows(college, hs) %>%
            d = enroltot,                     # d := enrollment (hs)
            e = frlpct,                       # e := frpl pct (hs)
            f = csr,                          # f := stu/cou ratio (hs)
-           g = district_enrollment_grade12,  # g := district enrollment g12
-           h = district_frl_pct,             # h := district frpl pct
-           i = district_stu_cou_ratio,       # i := district stu/cou ratio
-           j = district_fafsa_pct,           # j := district fafsa pct
-           k = advise_org,                   # k := hs advising orgs
-           l = is_col)                       # l := is college
+           g = district_name,                # g := district name
+           h = district_enrollment_grade12,  # h := district enrollment g12
+           i = district_frl_pct,             # i := district frpl pct
+           j = district_stu_cou_ratio,       # j := district stu/cou ratio
+           k = district_fafsa_pct,           # k := district fafsa pct
+           l = advise_org,                   # l := hs advising orgs
+           m = is_col)                       # m := is college
 
 ## set up as SP data frame
 lonlat <- df %>% select(lon, lat) %>% as.matrix()
-dfsp <- SpatialPointsDataFrame(lonlat, df %>% select(l),
+dfsp <- SpatialPointsDataFrame(lonlat, df %>% select(m),
                                proj4string = CRS('+init=epsg:3857'))
 
 ## write as geojson
 geojson_write(input = dfsp, file = file.path(ddir, 'schools.geojson'))
 
 ## write data as minified JS
-writeJSArray(df, 's', letters[1:12], file.path(jdir, 'school_array.js'))
+writeJSArray(df, 's', letters[1:13], file.path(jdir, 'school_array.js'))
 
 ## =============================================================================
 ## END FILE

@@ -4,12 +4,19 @@
 // reference
 // school information: s (array)
 //
-// a := school name
-// b := state fips
+// a := name
+// b := fips
 // c := sector (college)
 // d := enrollment (hs)
 // e := frpl pct (hs)
-// f := student / counselor ratio (hs)
+// f := stu/cou ratio (hs)
+// g := district name
+// h := district enrollment g12
+// i := district frpl pct
+// j := district stu/cou ratio
+// k := district fafsa pct
+// l := hs advising orgs
+// m := is college
 
 // INIT MAP ----------------------------------------------------------
 
@@ -30,12 +37,34 @@ var bbox = [[-126.01318, 30.12227],
 	    [-65.91797, 48.00164]];
 map.fitBounds(bbox);
 
-// VARIABLES ---------------------------------------------------------
+// POPUP & TEXT ------------------------------------------------------
 
 // init popup 
 var popup = new mapboxgl.Popup({
     closeButton: false
 });
+
+function popupText(hs, name, sect, distname, distenrol, distfrpl, distcsr,
+		   distfafsa, schenroltot, schfrlpct, schcsr, advorg) {
+
+    var htmlstr;
+
+    if (hs) {
+	htmlstr = '<h2>' + name + '</h2>';
+	// htmlstr += '</br>';
+	htmlstr += '<h3>District: ' + distname + '</h3>';
+	htmlstr += '<b>District enrollment: </b>' + distenrol + '</br>';
+	htmlstr += '<b>District FRPL: </b>' + distfrpl + '%' + '</br>';
+	htmlstr += '<b>District student/counselor ratio: </b>' + distcsr + ':1';
+    } else {
+	htmlstr = '<h2>' + name + '</h2>';
+	// htmlstr += '</br>';
+	htmlstr += '<b>Sector: </b>' + sector[sect];
+    }
+    return htmlstr;
+}
+
+// VARIABLES ---------------------------------------------------------
 
 // init structure to hold visible points
 var visible = [];
@@ -47,7 +76,6 @@ var messages = ['Zoom or drag the map to populate results',
 // get HTML elements for listing, filter bar, and search bar
 var filterEl = document.getElementById('feature-filter');
 var listingEl = document.getElementById('feature-listing');
-var searchEl = document.getElementById('search-filter');
 
 // init filter to be hidden
 filterEl.parentNode.style.display = 'none';
@@ -97,12 +125,30 @@ function renderListings(features) {
 	
         features.forEach(function(feature) {
 
-	    // var schname = getProperty(s, a, id);
+	    // is high school?
+	    var hs = (s[feature.id].m == 0 ? true : false);
+
+	    // get values
 	    var schname = s[feature.id].a;
+
+	    // if high school
+	    if (hs) {
+		var schenrl = s[feature.id].d;
+		var schfrpl = s[feature.id].e;
+		var schcsr = s[feature.id].f;
+		var distname = s[feature.id].g;
+		var distenrl = s[feature.id].h;
+		var distfrpl = s[feature.id].i;
+		var distcsr = s[feature.id].j;
+		var distfafsa = s[feature.id].k;
+	    } else {
+		var colsect = s[feature.id].c;
+	    }
+
             var item = document.createElement('a');
 	    
 	    // change bullet color based on whether HS or College
-	    var bulletcolor = (s[feature.id].c != undefined ? '#232D4B' : '#E57200');
+	    var bulletcolor = (hs ? '#E57200' : '#232D4B');
 
 	    item.href = '#';
 	    item.innerHTML = "<span class='bullet' style='color:" + bulletcolor
@@ -119,25 +165,22 @@ function renderListings(features) {
 		});
 
 		popup.setLngLat(feature.geometry.coordinates)
-                    .setText(schname)
-                    .addTo(map);
-		
+		    .setHTML(popupText(hs, schname, colsect, distname,
+				       distenrl, distfrpl, distcsr))    
+		    .addTo(map);
+				
 	    });
 
 	    // add popup when mousing over (if not active)
             item.addEventListener('mouseover', function() {
-		// if (!item.style.hasClass('active')) {
-                    popup.setLngLat(feature.geometry.coordinates)
-			.setText(schname)
-			.addTo(map);
-		// }
+                popup.setLngLat(feature.geometry.coordinates)
+		    .setHTML(popupText(hs, schname, colsect, schdist))
+		    .addTo(map);
             });
 	    
 	    // remove popup when mouse leaves (if not active)
 	    item.addEventListener('mouseleave', function() {
-		// if (!item.style.hasClass('active')) {
                     popup.remove();
-	//	}
             });
 	    
 	    
@@ -251,7 +294,7 @@ map.on('load', function () {
         'paint': {
             'circle-radius': 6,
             'circle-color': {
-		property: 'l',
+		property: 'm',
 		type: 'categorical',
 		stops: [
 		    [0, getColor(rtorange)],
@@ -279,9 +322,31 @@ map.on('load', function () {
 
         // populate the popup and set its coordinates based on the feature
         var feature = e.features[0];
+
+	// is high school?
+	var hs = (s[feature.id].m == 0 ? true : false);
+	
+	// get values
+	var schname = s[feature.id].a;
+	
+	// if high school
+	if (hs) {
+	    var schenrl = s[feature.id].d;
+	    var schfrpl = s[feature.id].e;
+	    var schcsr = s[feature.id].f;
+	    var distname = s[feature.id].g;
+	    var distenrl = s[feature.id].h;
+	    var distfrpl = s[feature.id].i;
+	    var distcsr = s[feature.id].j;
+	    var distfafsa = s[feature.id].k;
+	} else {
+	    var colsect = s[feature.id].c;
+	}
+	
         popup.setLngLat(feature.geometry.coordinates)
-	    .setText(s[feature.id].a)
-            .addTo(map);
+	    .setHTML(popupText(hs, schname, colsect, distname,
+			       distenrl, distfrpl, distcsr))    
+	    .addTo(map);
     });
 
     map.on('mouseleave', 'schools', function() {
@@ -294,21 +359,6 @@ map.on('load', function () {
     renderListings([]);
     
     // CONTROLS ------------------------------------------------------
-
-    // listingEl.addEventListener('click', function(e) {
-    // 	// Update the currentFeature to the store associated with the clicked link
-    // 	var clickedListing = data.features[this.dataPosition];
-    // 	// 1. Fly to the point associated with the clicked link
-    // 	flyToSchool(clickedListing);
-    // 	// 2. Close all other popups and display popup for clicked store
-    // 	// createPopUp(clickedListing);
-    // 	// 3. Highlight listing in sidebar (and remove highlight for all other listings)
-    // 	var activeItem = document.getElementsByClassName('active');
-    // 	if (activeItem[0]) {
-    // 	    activeItem[0].classList.remove('active');
-    // 	}
-    // 	this.parentNode.classList.add('active');
-    // });
 
     // filter box
     filterEl.addEventListener('keyup', function(e) {
