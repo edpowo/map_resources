@@ -30,7 +30,19 @@ body {
     height: 25%;
     font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
     background-color: #fff;
-    overflow: hidden;
+    overflow: auto;
+}
+
+.side {
+    text-align: center;
+}
+
+#instructions {
+    position: absolute;
+    visibility: visible;
+    padding: 1rem;
+    left: 0;
+    top: 3rem;
 }
 
 .col-map {
@@ -130,6 +142,7 @@ and (min-width: 1024px) {
 .col-sidebar .listing {
     overflow: auto;
     max-height: 100%;
+    background-color: #fff;
 }
 
 .col-sidebar .listing > * {
@@ -152,4 +165,12 @@ and (min-width: 1024px) {
     font-size: 2rem;
     padding-right: .5rem;
     vertical-align: middle;
+}
+
+table {
+    width: 100%;
+}
+
+.num {
+    text-align: center;
 }
