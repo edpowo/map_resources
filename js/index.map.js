@@ -44,22 +44,47 @@ var popup = new mapboxgl.Popup({
     closeButton: false
 });
 
-function popupText(hs, name, sect, distname, distenrol, distfrpl, distcsr,
-		   distfafsa, schenroltot, schfrlpct, schcsr, advorg) {
+function popupText(hs, schname, sect, schenroltot, schfrpl, schcsr,
+		   distname, distenrol, distfrpl, distcsr, distfafsa, advorgs) {
 
+    // init popup format string
     var htmlstr;
 
+    // convert undefined values into hyphens (skipping first)
+    for (i = 1; i < arguments.length - 1; i++) {
+	arguments[i] = (typeof arguments[i] == 'undefined' ? '-' : arguments[i]);
+    }
+
     if (hs) {
-	htmlstr = '<h2>' + name + '</h2>';
-	// htmlstr += '</br>';
-	htmlstr += '<h3>District: ' + distname + '</h3>';
-	htmlstr += '<b>District enrollment: </b>' + distenrol + '</br>';
-	htmlstr += '<b>District FRPL: </b>' + distfrpl + '%' + '</br>';
-	htmlstr += '<b>District student/counselor ratio: </b>' + distcsr + ':1';
+	htmlstr = "<h2>" + schname + "</h2>";
+	htmlstr += "<h3>District: " + distname + "</h3>";
+	htmlstr += "<table>";
+	htmlstr += "<tr><th></th><th>District</th><th>School</th></tr>";
+	htmlstr += "<tr><td>12th grade enrollment</td>"
+	    + "<td class = 'num'>" + distenrol + "</td>"
+	    + "<td class = 'num'>" + schenroltot + "</td></tr>";
+	htmlstr += "<tr><td>FRPL (%)</td>"
+	    + "<td class = 'num'>" + distfrpl + "</td>"
+	    + "<td class = 'num'>" + schfrpl + "</td></tr>";
+	htmlstr += "<tr><td>Students per counselor</td>"
+	    + "<td class = 'num'>" + distcsr + "</td>"
+	    + "<td class = 'num'>" + schcsr + "</td></tr>";
+	htmlstr += "</table>";
+
+	// get advising orgs, splitting on pipe (|)
+	htmlstr += "<h2>Advising organizations</h2>";
+	if (advorgs != undefined) {
+	    var orgs = advorgs.split("|");
+	    for (i = 0; i < orgs.length; i++) {
+		htmlstr += orgs[i] + "</br>";
+	    }
+	} else {
+	    htmlstr += "None"
+	}
+	
     } else {
-	htmlstr = '<h2>' + name + '</h2>';
-	// htmlstr += '</br>';
-	htmlstr += '<b>Sector: </b>' + sector[sect];
+	htmlstr = "<h2>" + schname + "</h2>";
+	htmlstr += "<b>Sector: </b>" + sector[sect];
     }
     return htmlstr;
 }
@@ -73,9 +98,10 @@ var visible = [];
 var messages = ['Zoom or drag the map to populate results',
 		'Check spelling or drag the map to re-populate results'];
 
-// get HTML elements for listing, filter bar, and search bar
+// get HTML elements for listing, filter bar, and instructions
 var filterEl = document.getElementById('feature-filter');
 var listingEl = document.getElementById('feature-listing');
+var instructionsEl = document.getElementById('instructions');
 
 // init filter to be hidden
 filterEl.parentNode.style.display = 'none';
@@ -111,6 +137,9 @@ function renderListings(features) {
     // if there are items visible on the map...
     if (features.length) {
 
+	// remove instructions
+	instructionsEl.style.visibility = 'hidden';
+	
 	// return filter text to black
 	filterEl.style.color = '#000';
 
@@ -141,6 +170,7 @@ function renderListings(features) {
 		var distfrpl = s[feature.id].i;
 		var distcsr = s[feature.id].j;
 		var distfafsa = s[feature.id].k;
+		var advorgs = s[feature.id].l;
 	    } else {
 		var colsect = s[feature.id].c;
 	    }
@@ -165,8 +195,17 @@ function renderListings(features) {
 		});
 
 		popup.setLngLat(feature.geometry.coordinates)
-		    .setHTML(popupText(hs, schname, colsect, distname,
-				       distenrl, distfrpl, distcsr))    
+		    .setHTML(popupText(hs, schname = schname,
+				       sect = colsect,
+				       schenroltot = schenrl,
+				       schfrpl = schfrpl,
+				       schcsr = schcsr,
+				       distname = distname,
+				       distenrl = distenrl,
+				       distfrpl = distfrpl,
+				       distcsr = distcsr,
+				       distfafsa = distfafsa,
+				       advorgs = advorgs))    
 		    .addTo(map);
 				
 	    });
@@ -174,7 +213,17 @@ function renderListings(features) {
 	    // add popup when mousing over (if not active)
             item.addEventListener('mouseover', function() {
                 popup.setLngLat(feature.geometry.coordinates)
-		    .setHTML(popupText(hs, schname, colsect, schdist))
+		    .setHTML(popupText(hs, schname = schname,
+				       sect = colsect,
+				       schenroltot = schenrl,
+				       schfrpl = schfrpl,
+				       schcsr = schcsr,
+				       distname = distname,
+				       distenrl = distenrl,
+				       distfrpl = distfrpl,
+				       distcsr = distcsr,
+				       distfafsa = distfafsa,
+				       advorgs = advorgs))
 		    .addTo(map);
             });
 	    
@@ -204,6 +253,7 @@ function renderListings(features) {
 	    noFilterMatch = true;
 	} else {
 	    filterEl.parentNode.style.display = 'none';
+	    instructionsEl.style.visibility = 'visible';
 	    message = messages[0]
 	}
 
@@ -339,13 +389,23 @@ map.on('load', function () {
 	    var distfrpl = s[feature.id].i;
 	    var distcsr = s[feature.id].j;
 	    var distfafsa = s[feature.id].k;
+	    var advorgs = s[feature.id].l;
 	} else {
 	    var colsect = s[feature.id].c;
 	}
 	
         popup.setLngLat(feature.geometry.coordinates)
-	    .setHTML(popupText(hs, schname, colsect, distname,
-			       distenrl, distfrpl, distcsr))    
+	    .setHTML(popupText(hs, schname = schname,
+			       sect = colsect,
+			       schenroltot = schenrl,
+			       schfrpl = schfrpl,
+			       schcsr = schcsr,
+			       distname = distname,
+			       distenrl = distenrl,
+			       distfrpl = distfrpl,
+			       distcsr = distcsr,
+			       distfafsa = distfafsa,
+			       advorgs = advorgs))    
 	    .addTo(map);
     });
 

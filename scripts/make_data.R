@@ -127,8 +127,8 @@ dist <- read_csv(file.path(rdir, 'district_level_clean.csv')) %>%
 ## advising programs at school level
 advise <- read_csv(file.path(rdir, 'advising_program_school_clean.csv')) %>%
     setNames(tolower(names(.))) %>%
-    unite(advise_org, c('org_1','org_2'), sep = '| ') %>%
-    mutate(advise_org = gsub('| NA$', '', advise_org))
+    unite(advise_org, c('org_1','org_2'), sep = '|') %>%
+    mutate(advise_org = gsub('\\|NA$', '', advise_org))
 
 ## merge into high school data
 hs <- hs %>%
