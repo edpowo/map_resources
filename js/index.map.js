@@ -4,12 +4,19 @@
 // reference
 // school information: s (array)
 //
-// a := school name
-// b := state fips
+// a := name
+// b := fips
 // c := sector (college)
 // d := enrollment (hs)
 // e := frpl pct (hs)
-// f := student / counselor ratio (hs)
+// f := stu/cou ratio (hs)
+// g := district name
+// h := district enrollment g12
+// i := district frpl pct
+// j := district stu/cou ratio
+// k := district fafsa pct
+// l := hs advising orgs
+// m := is college
 
 // INIT MAP ----------------------------------------------------------
 
@@ -20,17 +27,69 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiYnRza2lubmVyIiwiYSI6ImNqOTRhbzk1M'
 // init map
 var map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/mapbox/{{ site.mapstyle }}',
+    style: 'mapbox://styles/mapbox/{{ site.mapstyle }}?optimize=true',
     center: [-96, 37.8],
     zoom: 4
 });
 
-// VARIABLES ---------------------------------------------------------
+// fit bounds based on screen view
+var bbox = [[-126.01318, 30.12227],
+	    [-65.91797, 48.00164]];
+map.fitBounds(bbox);
+
+// POPUP & TEXT ------------------------------------------------------
 
 // init popup 
 var popup = new mapboxgl.Popup({
     closeButton: false
 });
+
+function popupText(hs, schname, sect, schenroltot, schfrpl, schcsr,
+		   distname, distenrol, distfrpl, distcsr, distfafsa, advorgs) {
+
+    // init popup format string
+    var htmlstr;
+
+    // convert undefined values into hyphens (skipping first)
+    for (i = 1; i < arguments.length - 1; i++) {
+	arguments[i] = (typeof arguments[i] == 'undefined' ? '-' : arguments[i]);
+    }
+
+    if (hs) {
+	htmlstr = "<h2>" + schname + "</h2>";
+	htmlstr += "<h3>District: " + distname + "</h3>";
+	htmlstr += "<table>";
+	htmlstr += "<tr><th></th><th>District</th><th>School</th></tr>";
+	htmlstr += "<tr><td>12th grade enrollment</td>"
+	    + "<td class = 'num'>" + distenrol + "</td>"
+	    + "<td class = 'num'>" + schenroltot + "</td></tr>";
+	htmlstr += "<tr><td>FRPL (%)</td>"
+	    + "<td class = 'num'>" + distfrpl + "</td>"
+	    + "<td class = 'num'>" + schfrpl + "</td></tr>";
+	htmlstr += "<tr><td>Students per counselor</td>"
+	    + "<td class = 'num'>" + distcsr + "</td>"
+	    + "<td class = 'num'>" + schcsr + "</td></tr>";
+	htmlstr += "</table>";
+
+	// get advising orgs, splitting on pipe (|)
+	htmlstr += "<h2>Advising organizations</h2>";
+	if (advorgs != undefined) {
+	    var orgs = advorgs.split("|");
+	    for (i = 0; i < orgs.length; i++) {
+		htmlstr += orgs[i] + "</br>";
+	    }
+	} else {
+	    htmlstr += "None"
+	}
+	
+    } else {
+	htmlstr = "<h2>" + schname + "</h2>";
+	htmlstr += "<b>Sector: </b>" + sector[sect];
+    }
+    return htmlstr;
+}
+
+// VARIABLES ---------------------------------------------------------
 
 // init structure to hold visible points
 var visible = [];
@@ -39,10 +98,10 @@ var visible = [];
 var messages = ['Zoom or drag the map to populate results',
 		'Check spelling or drag the map to re-populate results'];
 
-// get HTML elements for listing, filter bar, and search bar
+// get HTML elements for listing, filter bar, and instructions
 var filterEl = document.getElementById('feature-filter');
 var listingEl = document.getElementById('feature-listing');
-var searchEl = document.getElementById('search-filter');
+var instructionsEl = document.getElementById('instructions');
 
 // init filter to be hidden
 filterEl.parentNode.style.display = 'none';
@@ -78,6 +137,9 @@ function renderListings(features) {
     // if there are items visible on the map...
     if (features.length) {
 
+	// remove instructions
+	instructionsEl.style.visibility = 'hidden';
+	
 	// return filter text to black
 	filterEl.style.color = '#000';
 
@@ -92,12 +154,31 @@ function renderListings(features) {
 	
         features.forEach(function(feature) {
 
-	    // var schname = getProperty(s, a, id);
+	    // is high school?
+	    var hs = (s[feature.id].m == 0 ? true : false);
+
+	    // get values
 	    var schname = s[feature.id].a;
+
+	    // if high school
+	    if (hs) {
+		var schenrl = s[feature.id].d;
+		var schfrpl = s[feature.id].e;
+		var schcsr = s[feature.id].f;
+		var distname = s[feature.id].g;
+		var distenrl = s[feature.id].h;
+		var distfrpl = s[feature.id].i;
+		var distcsr = s[feature.id].j;
+		var distfafsa = s[feature.id].k;
+		var advorgs = s[feature.id].l;
+	    } else {
+		var colsect = s[feature.id].c;
+	    }
+
             var item = document.createElement('a');
 	    
 	    // change bullet color based on whether HS or College
-	    var bulletcolor = (s[feature.id].c != undefined ? '#232D4B' : '#E57200');
+	    var bulletcolor = (hs ? '#E57200' : '#232D4B');
 
 	    item.href = '#';
 	    item.innerHTML = "<span class='bullet' style='color:" + bulletcolor
@@ -114,25 +195,41 @@ function renderListings(features) {
 		});
 
 		popup.setLngLat(feature.geometry.coordinates)
-                    .setText(schname)
-                    .addTo(map);
-		
+		    .setHTML(popupText(hs, schname = schname,
+				       sect = colsect,
+				       schenroltot = schenrl,
+				       schfrpl = schfrpl,
+				       schcsr = schcsr,
+				       distname = distname,
+				       distenrl = distenrl,
+				       distfrpl = distfrpl,
+				       distcsr = distcsr,
+				       distfafsa = distfafsa,
+				       advorgs = advorgs))    
+		    .addTo(map);
+				
 	    });
 
 	    // add popup when mousing over (if not active)
             item.addEventListener('mouseover', function() {
-		// if (!item.style.hasClass('active')) {
-                    popup.setLngLat(feature.geometry.coordinates)
-			.setText(schname)
-			.addTo(map);
-		// }
+                popup.setLngLat(feature.geometry.coordinates)
+		    .setHTML(popupText(hs, schname = schname,
+				       sect = colsect,
+				       schenroltot = schenrl,
+				       schfrpl = schfrpl,
+				       schcsr = schcsr,
+				       distname = distname,
+				       distenrl = distenrl,
+				       distfrpl = distfrpl,
+				       distcsr = distcsr,
+				       distfafsa = distfafsa,
+				       advorgs = advorgs))
+		    .addTo(map);
             });
 	    
 	    // remove popup when mouse leaves (if not active)
 	    item.addEventListener('mouseleave', function() {
-		// if (!item.style.hasClass('active')) {
                     popup.remove();
-	//	}
             });
 	    
 	    
@@ -156,6 +253,7 @@ function renderListings(features) {
 	    noFilterMatch = true;
 	} else {
 	    filterEl.parentNode.style.display = 'none';
+	    instructionsEl.style.visibility = 'visible';
 	    message = messages[0]
 	}
 
@@ -246,7 +344,7 @@ map.on('load', function () {
         'paint': {
             'circle-radius': 6,
             'circle-color': {
-		property: 'l',
+		property: 'm',
 		type: 'categorical',
 		stops: [
 		    [0, getColor(rtorange)],
@@ -274,9 +372,41 @@ map.on('load', function () {
 
         // populate the popup and set its coordinates based on the feature
         var feature = e.features[0];
+
+	// is high school?
+	var hs = (s[feature.id].m == 0 ? true : false);
+	
+	// get values
+	var schname = s[feature.id].a;
+	
+	// if high school
+	if (hs) {
+	    var schenrl = s[feature.id].d;
+	    var schfrpl = s[feature.id].e;
+	    var schcsr = s[feature.id].f;
+	    var distname = s[feature.id].g;
+	    var distenrl = s[feature.id].h;
+	    var distfrpl = s[feature.id].i;
+	    var distcsr = s[feature.id].j;
+	    var distfafsa = s[feature.id].k;
+	    var advorgs = s[feature.id].l;
+	} else {
+	    var colsect = s[feature.id].c;
+	}
+	
         popup.setLngLat(feature.geometry.coordinates)
-	    .setText(s[feature.id].a)
-            .addTo(map);
+	    .setHTML(popupText(hs, schname = schname,
+			       sect = colsect,
+			       schenroltot = schenrl,
+			       schfrpl = schfrpl,
+			       schcsr = schcsr,
+			       distname = distname,
+			       distenrl = distenrl,
+			       distfrpl = distfrpl,
+			       distcsr = distcsr,
+			       distfafsa = distfafsa,
+			       advorgs = advorgs))    
+	    .addTo(map);
     });
 
     map.on('mouseleave', 'schools', function() {
@@ -289,21 +419,6 @@ map.on('load', function () {
     renderListings([]);
     
     // CONTROLS ------------------------------------------------------
-
-    // listingEl.addEventListener('click', function(e) {
-    // 	// Update the currentFeature to the store associated with the clicked link
-    // 	var clickedListing = data.features[this.dataPosition];
-    // 	// 1. Fly to the point associated with the clicked link
-    // 	flyToSchool(clickedListing);
-    // 	// 2. Close all other popups and display popup for clicked store
-    // 	// createPopUp(clickedListing);
-    // 	// 3. Highlight listing in sidebar (and remove highlight for all other listings)
-    // 	var activeItem = document.getElementsByClassName('active');
-    // 	if (activeItem[0]) {
-    // 	    activeItem[0].classList.remove('active');
-    // 	}
-    // 	this.parentNode.classList.add('active');
-    // });
 
     // filter box
     filterEl.addEventListener('keyup', function(e) {
