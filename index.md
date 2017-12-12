@@ -29,6 +29,7 @@ custom_js:
 		<div id='feature-listing' class='listing'></div>
 	</div>	
 	<div class='col-map col-tablet-map'>
+		<nav id='toggle'></nav>
 		<div id='map'></div>
 	</div>
 </div>

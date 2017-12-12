@@ -102,6 +102,7 @@ var messages = ['Zoom or drag the map to populate results',
 var filterEl = document.getElementById('feature-filter');
 var listingEl = document.getElementById('feature-listing');
 var instructionsEl = document.getElementById('instructions');
+var toggle = document.getElementById('toggle');
 
 // init filter to be hidden
 filterEl.parentNode.style.display = 'none';
@@ -330,20 +331,19 @@ map.on('load', function () {
     	data: data
     });
 
-    // LAYER ---------------------------------------------------------
-     
-    // add schools layer
+    // LAYERS --------------------------------------------------------
+
     map.addLayer({
     	'id': 'schools',
     	'type': 'circle',
     	'source': 'schools',
     	'minzoom': 7,
     	'layout': {
-            'visibility': 'visible'
-        },
-        'paint': {
-            'circle-radius': 6,
-            'circle-color': {
+	    'visibility': 'visible'
+	},
+	'paint': {
+	    'circle-radius': 6,
+	    'circle-color': {
 		property: 'm',
 		type: 'categorical',
 		stops: [
@@ -351,9 +351,9 @@ map.on('load', function () {
 		    [1, getColor(jeffblue)]
 		]
 	    }
-        }
+	}
     });
-
+    
     // SIDEBAR -------------------------------------------------------
 
     // add to visible variable on these events, which triggers sidebar
@@ -463,6 +463,35 @@ map.on('load', function () {
 
     // add zoom and rotation controls to the map.
     map.addControl(new mapboxgl.NavigationControl());
+
+    // toggle for colleges
+    var link = document.createElement('a');
+    link.href = '#';
+    link.className = 'active';
+    link.textContent = 'hide colleges';
+    
+    link.onclick = function (e) { 
+	if (this.className === '') {
+	    this.className = 'active';
+	    this.textContent = 'hide colleges';
+	    map.setFilter('schools', ['has', '$id']);
+	    // addToVisible();
+	} else {
+	    this.className = '';
+	    this.textContent = 'show colleges';
+	    var filtered = visible.filter(function(feature) {
+		var name = normalize(s[feature.id].a);
+		var coll = s[feature.id].m;
+		return name.indexOf(coll) !== '1';
+            });
+            renderListings(filtered);
+	    map.setFilter('schools', ['in', '$id'].concat(filtered.map(function(feature) {
+		return feature.id;
+            })));
+	}
+    };
+
+    toggle.appendChild(link);
  
 });
 
