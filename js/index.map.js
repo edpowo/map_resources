@@ -94,6 +94,9 @@ function popupText(hs, schname, sect, schenroltot, schfrpl, schcsr,
 // init structure to hold visible points
 var visible = [];
 
+// init variable to hold input (filtering) text
+var inputText;
+
 // init message variable
 var messages = ['Zoom or drag the map to populate results',
 		'Check spelling or drag the map to re-populate results'];
@@ -110,6 +113,10 @@ filterEl.parentNode.style.display = 'none';
 // init filtering switch
 var filterSwitch = false;
 var noFilterMatch = false;
+
+// GENERAL EVENTS ----------------------------------------------------
+
+var keyUpEvent = new Event('keyup');
 
 // GENERAL FUNCTIONS -------------------------------------------------
 
@@ -306,6 +313,35 @@ function addToVisible() {
     }
 }
 
+// check input text
+function checkInput(text) {
+    return (text === '' ? false : true);
+}
+
+
+// function to filter schools with text input
+function textFilter(e) {
+    
+    filterSwitch = true;
+    
+    inputText = normalize(e.target.value);
+    
+    // remove visible features that don't match the input value.
+    var filtered = visible.filter(function(feature) {
+        var name = normalize(s[feature.id].a);
+        return name.indexOf(inputText) > -1;
+    });
+    
+    // populate the sidebar with filtered results
+    renderListings(filtered);
+    
+    // set the filter to populate features into the layer
+    map.setFilter('schools', ['in', '$id'].concat(filtered.map(function(feature) {
+        return feature.id;
+    })));
+    popup.remove();  
+}
+
 // load data into memory
 var data = (function() {
     var data = null;
@@ -421,28 +457,7 @@ map.on('load', function () {
     // CONTROLS ------------------------------------------------------
 
     // filter box
-    filterEl.addEventListener('keyup', function(e) {
-
-	filterSwitch = true;
-	
-        var value = normalize(e.target.value);
-	
-        // remove visible features that don't match the input value.
-        var filtered = visible.filter(function(feature) {
-            var name = normalize(s[feature.id].a);
-            return name.indexOf(value) > -1;
-        });
-	
-        // populate the sidebar with filtered results
-        renderListings(filtered);
-	
-        // set the filter to populate features into the layer
-        map.setFilter('schools', ['in', '$id'].concat(filtered.map(function(feature) {
-            return feature.id;
-        })));
-	popup.remove();
-	
-    });
+    filterEl.addEventListener('keyup', textFilter);
 
     // add geocoder
     map.addControl(new MapboxGeocoder({
@@ -474,20 +489,27 @@ map.on('load', function () {
 	if (this.className === '') {
 	    this.className = 'active';
 	    this.textContent = 'hide colleges';
-	    map.setFilter('schools', ['has', '$id']);
-	    // addToVisible();
+	    if (checkInput(inputText)) {
+		filterEl.dispatchEvent(keyUpEvent);
+	    } else {
+		map.setFilter('schools', ['has', '$id']);
+	    	addToVisible();
+	    }
 	} else {
 	    this.className = '';
 	    this.textContent = 'show colleges';
 	    var filtered = visible.filter(function(feature) {
-		var name = normalize(s[feature.id].a);
-		var coll = s[feature.id].m;
-		return name.indexOf(coll) !== '1';
+		return s[feature.id].m !== 1;
             });
-            renderListings(filtered);
-	    map.setFilter('schools', ['in', '$id'].concat(filtered.map(function(feature) {
-		return feature.id;
-            })));
+	    renderListings(filtered);
+	    map.setFilter('schools', ['in', '$id']
+	    		  .concat(filtered.map(function(feature) {
+	    		      return feature.id;
+	    		  }))
+	    		 );
+	    if (checkInput(inputText)) {
+		filterEl.dispatchEvent(keyUpEvent);
+	    }
 	}
     };
 
