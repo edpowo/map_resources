@@ -4,7 +4,11 @@ custom_css:
 - main
 custom_js:
 - index.map
-- functions
+- func_general
+- func_popup
+- func_event
+- func_mapping
+- objects
 - settings
 - school_array
 ---
