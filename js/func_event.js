@@ -15,13 +15,17 @@ function eventFlyTo(feature, popup) {
 
 // function to change marker color for colleges
 function setCollegeMarker(swToggle) {
-    var cmColor = (swToggle ? zeroalph : jeffblue);
-    map.setPaintProperty('schools', 'circle-color', {
-	'property': 'm',
+    var opacity = (swToggle ? 0 : 1);
+    map.setPaintProperty('schools', 'icon-opacity', {
+	'property': 'a',
 	'type': 'categorical',
 	'stops': [
-	    [0, getColor(rtorange)],
-    	    [1, getColor(cmColor)]
+	    [0, 1],
+	    [1, 1],
+	    [2, opacity],
+	    [3, opacity],
+	    [4, opacity],
+	    [5, opacity]
 	]
     });
 }

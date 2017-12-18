@@ -18,21 +18,21 @@ mapboxgl.Popup.prototype.text = function(feature) {
 
     // get information
     var school = new School(feature);
-    var district = new District(feature);
+    // var district = new District(feature);
 
-    if (!school.iscollege) {
+    if (parseInt(school.cat) === 0 || parseInt(school.cat) === 1) {
 	htmlstr = "<h2>" + school.name + "</h2>";
-	htmlstr += "<h3>District: " + district.name + "</h3>";
+	// htmlstr += "<h3>District: " + district.name + "</h3>";
 	htmlstr += "<table>";
 	htmlstr += "<tr><th></th><th>District</th><th>School</th></tr>";
 	htmlstr += "<tr><td>12th grade enrollment</td>"
-	    + "<td class = 'num'>" + district.enroll + "</td>"
+	    + "<td class = 'num'>" + '' + "</td>"
 	    + "<td class = 'num'>" + school.enroll + "</td></tr>";
 	htmlstr += "<tr><td>FRPL (%)</td>"
-	    + "<td class = 'num'>" + district.frpl + "</td>"
+	    + "<td class = 'num'>" + '' + "</td>"
 	    + "<td class = 'num'>" + school.frpl + "</td></tr>";
 	htmlstr += "<tr><td>Students per counselor</td>"
-	    + "<td class = 'num'>" + district.csr + "</td>"
+	    + "<td class = 'num'>" + '' + "</td>"
 	    + "<td class = 'num'>" + school.csr + "</td></tr>";
 	htmlstr += "</table>";
 
@@ -47,7 +47,7 @@ mapboxgl.Popup.prototype.text = function(feature) {
 	}
     } else {
 	htmlstr = "<h2>" + school.name + "</h2>";
-	htmlstr += "<b>Sector: </b>" + school.sector;
+	htmlstr += "<b>Sector: </b>" + sector[school.cat];
     }
     return htmlstr;
 }

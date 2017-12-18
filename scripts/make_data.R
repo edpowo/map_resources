@@ -8,7 +8,7 @@
 ################################################################################
 
 ## libraries
-libs <- c('tidyverse', 'geojsonio', 'sp', 'rgdal')
+libs <- c('tidyverse', 'geojsonio', 'sp', 'rgdal', 'stringr')
 lapply(libs, require, character.only = TRUE)
 
 ## paths
@@ -85,7 +85,10 @@ college <- read_csv(file.path(rdir, 'HD2015.zip')) %>%
            fips %in% cw$stfips) %>%
     mutate(lon = as.numeric(lon),
            lat = as.numeric(lat),
-           is_col = 1) %>%
+           cat = ifelse(sector == 1, 2,
+                 ifelse(sector == 2, 3,
+                        sector))) %>%
+    select(-sector) %>%
     filter(!is.na(lon),
            !is.na(lat))
 
@@ -111,18 +114,17 @@ hs <- read_csv(file.path(rdir, 'school_level_clean.csv')) %>%
            lat = as.numeric(lat),
            fips = as.integer(fips)) %>%
     filter(!is.na(lon),
-           !is.na(lat)) %>%
-    mutate(is_col = 0)
+           !is.na(lat))
 
-## get district stuff to merge in
-dist <- read_csv(file.path(rdir, 'district_level_clean.csv')) %>%
-    setNames(tolower(names(.))) %>%
-    select(nces_dist_id,
-           district_name,
-           district_enrollment_grade12,
-           district_frl_pct,
-           district_stu_cou_ratio,
-           district_fafsa_pct)
+## ## get district stuff to merge in
+## dist <- read_csv(file.path(rdir, 'district_level_clean.csv')) %>%
+##     setNames(tolower(names(.))) %>%
+##     select(nces_dist_id,
+##            district_name,
+##            district_enrollment_grade12,
+##            district_frl_pct,
+##            district_stu_cou_ratio,
+##            district_fafsa_pct)
 
 ## advising programs at school level
 advise <- read_csv(file.path(rdir, 'advising_program_school_clean.csv')) %>%
@@ -132,9 +134,10 @@ advise <- read_csv(file.path(rdir, 'advising_program_school_clean.csv')) %>%
 
 ## merge into high school data
 hs <- hs %>%
-    left_join(dist) %>%
+    ## left_join(dist) %>%
     left_join(advise) %>%
-    select(-starts_with('nces_'))
+    select(-starts_with('nces_')) %>%
+    mutate(cat = ifelse(is.na(advise_org), 0, 1))
 
 ################################################################################
 ## COMBINE & WRITE
@@ -143,30 +146,29 @@ hs <- hs %>%
 ## bind
 df <- bind_rows(college, hs) %>%
     ## rename for very small names
-    rename(a = instnm,                       # a := name
-           b = fips,                         # b := fips
-           c = sector,                       # c := sector (college)
+    rename(a = cat,                          # a := cateogry
+           b = instnm,                       # b := name
+           c = fips,                         # c := fips
            d = enroltot,                     # d := enrollment (hs)
            e = frlpct,                       # e := frpl pct (hs)
            f = csr,                          # f := stu/cou ratio (hs)
-           g = district_name,                # g := district name
-           h = district_enrollment_grade12,  # h := district enrollment g12
-           i = district_frl_pct,             # i := district frpl pct
-           j = district_stu_cou_ratio,       # j := district stu/cou ratio
-           k = district_fafsa_pct,           # k := district fafsa pct
-           l = advise_org,                   # l := hs advising orgs
-           m = is_col)                       # m := is college
+           ## g = district_name,                # g := district name
+           ## h = district_enrollment_grade12,  # h := district enrollment g12
+           ## i = district_frl_pct,             # i := district frpl pct
+           ## j = district_stu_cou_ratio,       # j := district stu/cou ratio
+           ## k = district_fafsa_pct,           # k := district fafsa pct
+           g = advise_org)                   # g := hs advising orgs
 
 ## set up as SP data frame
 lonlat <- df %>% select(lon, lat) %>% as.matrix()
-dfsp <- SpatialPointsDataFrame(lonlat, df %>% select(m),
+dfsp <- SpatialPointsDataFrame(lonlat, df %>% select(a),
                                proj4string = CRS('+init=epsg:3857'))
 
 ## write as geojson
 geojson_write(input = dfsp, file = file.path(ddir, 'schools.geojson'))
 
 ## write data as minified JS
-writeJSArray(df, 's', letters[1:13], file.path(jdir, 'school_array.js'))
+writeJSArray(df, 's', letters[1:7], file.path(jdir, 'school_array.js'))
 
 ## =============================================================================
 ## END FILE

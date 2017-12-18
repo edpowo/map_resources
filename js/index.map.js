@@ -60,31 +60,100 @@ var data = (function() {
 // LOAD MAP --------------------------------------------------------------------
 map.on('load', function () {
 
-    // ADD DATA ------------------------------------------------------
+    // DATA ----------------------------------------------------------
   
     map.addSource('schools', {
     	type: 'geojson',
     	data: data
     });
 
+    // ICONS ---------------------------------------------------------
+
+    // for (var icon in icons) {
+    // 	map.loadImage(icons[icon], function(error, link) {
+    // 	    if (error) throw error;
+    // 	    map.addImage(icon, link);
+    // 	});
+    // }
+
+    map.loadImage('{{ site.baseurl }}{{ site.images }}/college-4.png',
+		  function(error, image) {
+    		      if (error) throw error;
+    		      map.addImage('college4', image);
+		  });
+    map.loadImage('{{ site.baseurl }}{{ site.images }}/college-2.png',
+		  function(error, image) {
+    		      if (error) throw error;
+    		      map.addImage('college2', image);
+		  });
+    map.loadImage('{{ site.baseurl }}{{ site.images }}/school.png',
+		  function(error, image) {
+    		      if (error) throw error;
+    		      map.addImage('schoolna', image);
+		  });
+    map.loadImage('{{ site.baseurl }}{{ site.images }}/school-advising.png',
+		  function(error, image) {
+    		      if (error) throw error;
+    		      map.addImage('schoolad', image);
+		  });
+    
     // LAYERS --------------------------------------------------------
 
+    // map.addLayer({
+    // 	'id': 'schools',
+    // 	'type': 'circle',
+    // 	'source': 'schools',
+    // 	'minzoom': 7,
+    // 	'layout': {
+    // 	    'visibility': 'visible'
+    // 	},
+    // 	'paint': {
+    // 	    'circle-radius': 6,
+    // 	    'circle-color': {
+    // 		property: 'm',
+    // 		type: 'categorical',
+    // 		stops: [
+    // 		    [0, getColor(rtorange)],
+    // 		    [1, getColor(jeffblue)]
+    // 		]
+    // 	    }
+    // 	}
+    // });
+
     map.addLayer({
-    	'id': 'schools',
-    	'type': 'circle',
-    	'source': 'schools',
-    	'minzoom': 7,
-    	'layout': {
-	    'visibility': 'visible'
+	'id': 'schools',
+	'type': 'symbol',
+	'source': 'schools',
+	'minzoom': 7,
+	'layout': {
+	    'visibility': 'visible',
+	    'icon-image': {
+		'property': 'a',
+		'type': 'categorical',
+		'stops': [
+		    [0, 'schoolna'],
+		    [1, 'schoolad'],
+		    [2, 'college4'],
+		    [3, 'college4'],
+		    [4, 'college2'],
+		    [5, 'college2']
+		]
+	    },
+	    'icon-allow-overlap': true,
+	    'icon-keep-upright': true,
+	    'icon-size': 0.05
 	},
 	'paint': {
-	    'circle-radius': 6,
-	    'circle-color': {
-		property: 'm',
-		type: 'categorical',
-		stops: [
-		    [0, getColor(rtorange)],
-		    [1, getColor(jeffblue)]
+	    'icon-opacity': {
+		'property': 'a',
+		'type': 'categorical',
+		'stops': [
+		    [0, 1],
+		    [1, 1],
+		    [2, 1],
+		    [3, 1],
+		    [4, 1],
+		    [5, 1]
 		]
 	    }
 	}
@@ -99,7 +168,7 @@ map.on('load', function () {
     // POPUPS --------------------------------------------------------
 
     map.on('mousemove', 'schools', function(e) {
-	if (!(s[e.features[0].id].m == 1 && swToggle)) {
+	if (!(s[e.features[0].id].a < 2 && swToggle)) {
 	    map.getCanvas().style.cursor = 'pointer';
 	    popup.create(e.features[0]);
 	}

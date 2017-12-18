@@ -29,8 +29,8 @@ function renderListings(features) {
 	elFilter.style.color = '#000';
 	// sort so that they are listed alphabetically in list
 	features.sort(function(x,y) {
-	    if(s[x.id].a < s[y.id].a) return -1;
-	    if(s[x.id].a > s[y.id].a) return 1;
+	    if(s[x.id].b < s[y.id].b) return -1;
+	    if(s[x.id].b > s[y.id].b) return 1;
 	    return 0; 
 	});
 	// for each visible feature...
@@ -38,7 +38,7 @@ function renderListings(features) {
 	    // school object
 	    var school = new School(feature);
 	    // change bullet color based on whether HS or College
-	    var bc = (school.iscollege ? getColor(jeffblue) : getColor(rtorange));
+	    var bc = (school.cat > 1 ? getColor(jeffblue) : getColor(rtorange));
 	    // create item for list
 	    var item = document.createElement('a');
 	    item.href = '#';
@@ -88,7 +88,7 @@ function addToVisible() {
 	swNoFilterMatch = swFilter = false;
 	map.setFilter('schools', ['has', '$id']);
     }
-    var filter = (swToggle ? ['==','m',0] : false);
+    var filter = (swToggle ? ['<','a',2] : false);
     // get rendered features 
     var features = map.queryRenderedFeatures({
 	layers :['schools'],
