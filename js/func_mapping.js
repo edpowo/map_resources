@@ -115,7 +115,7 @@ function textFilter(e, visible) {
     var inputText = normalize(e.target.value);
     // remove visible features that don't match the input value.
     var filtered = visible.filter(function(feature) {
-        var name = normalize(s[feature.id].a);
+        var name = normalize(s[feature.id].b);
         return name.indexOf(inputText) > -1;
     });
     // populate the sidebar with filtered results

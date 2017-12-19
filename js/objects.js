@@ -13,7 +13,7 @@
 // g := hs advising orgs
 
 function School(feature) {
-    this.cat = parseInt(s[feature.id].a) || '-';
+    this.cat = s[feature.id].a || '-';
     this.name = s[feature.id].b || '-';
     this.fips = s[feature.id].c || '-';
     this.enroll = s[feature.id].d || '-';

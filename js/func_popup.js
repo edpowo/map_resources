@@ -19,8 +19,9 @@ mapboxgl.Popup.prototype.text = function(feature) {
     // get information
     var school = new School(feature);
     // var district = new District(feature);
+    var isHS = !(school.cat > 1);
 
-    if (parseInt(school.cat) === 0 || parseInt(school.cat) === 1) {
+    if (isHS) {
 	htmlstr = "<h2>" + school.name + "</h2>";
 	// htmlstr += "<h3>District: " + district.name + "</h3>";
 	htmlstr += "<table>";

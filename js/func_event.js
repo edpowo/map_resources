@@ -15,18 +15,19 @@ function eventFlyTo(feature, popup) {
 
 // function to change marker color for colleges
 function setCollegeMarker(swToggle) {
-    var opacity = (swToggle ? 0 : 1);
-    map.setPaintProperty('schools', 'icon-opacity', {
-	'property': 'a',
-	'type': 'categorical',
-	'stops': [
-	    [0, 1],
-	    [1, 1],
-	    [2, opacity],
-	    [3, opacity],
-	    [4, opacity],
-	    [5, opacity]
-	]
+    var opacity4 = (swToggle ? 'transparent' : 'college4');
+    var opacity2 = (swToggle ? 'transparent' : 'college2');
+    map.setLayoutProperty('schools', 'icon-image', {
+		'property': 'a',
+		'type': 'categorical',
+		'stops': [
+		    [0, 'schoolna'],
+		    [1, 'schoolad'],
+		    [2, opacity4],
+		    [3, opacity4],
+		    [4, opacity2],
+		    [5, opacity2]
+		]
     });
 }
 

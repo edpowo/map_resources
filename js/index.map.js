@@ -70,55 +70,39 @@ map.on('load', function () {
     // ICONS ---------------------------------------------------------
 
     // for (var icon in icons) {
-    // 	map.loadImage(icons[icon], function(error, link) {
+    // 	map.loadImage(icons[icon], function(error, image) {
     // 	    if (error) throw error;
-    // 	    map.addImage(icon, link);
+    // 	    map.addImage(icon, image);
     // 	});
     // }
 
-    map.loadImage('{{ site.baseurl }}{{ site.images }}/college-4.png',
-		  function(error, image) {
+    map.loadImage('{{ site.baseurl }}{{ site.images }}/college-4-bg.png',
+    		  function(error, image) {
     		      if (error) throw error;
     		      map.addImage('college4', image);
-		  });
-    map.loadImage('{{ site.baseurl }}{{ site.images }}/college-2.png',
-		  function(error, image) {
+    		  });
+    map.loadImage('{{ site.baseurl }}{{ site.images }}/college-2-bg.png',
+    		  function(error, image) {
     		      if (error) throw error;
     		      map.addImage('college2', image);
-		  });
-    map.loadImage('{{ site.baseurl }}{{ site.images }}/school.png',
-		  function(error, image) {
+    		  });
+    map.loadImage('{{ site.baseurl }}{{ site.images }}/school-bg.png',
+    		  function(error, image) {
     		      if (error) throw error;
     		      map.addImage('schoolna', image);
-		  });
-    map.loadImage('{{ site.baseurl }}{{ site.images }}/school-advising.png',
-		  function(error, image) {
+    		  });
+    map.loadImage('{{ site.baseurl }}{{ site.images }}/school-advising-bg.png',
+    		  function(error, image) {
     		      if (error) throw error;
     		      map.addImage('schoolad', image);
-		  });
+    		  });
+    map.loadImage('{{ site.baseurl }}{{ site.images }}/transparent.png',
+    		  function(error, image) {
+    		      if (error) throw error;
+    		      map.addImage('transparent', image);
+    		  });
     
     // LAYERS --------------------------------------------------------
-
-    // map.addLayer({
-    // 	'id': 'schools',
-    // 	'type': 'circle',
-    // 	'source': 'schools',
-    // 	'minzoom': 7,
-    // 	'layout': {
-    // 	    'visibility': 'visible'
-    // 	},
-    // 	'paint': {
-    // 	    'circle-radius': 6,
-    // 	    'circle-color': {
-    // 		property: 'm',
-    // 		type: 'categorical',
-    // 		stops: [
-    // 		    [0, getColor(rtorange)],
-    // 		    [1, getColor(jeffblue)]
-    // 		]
-    // 	    }
-    // 	}
-    // });
 
     map.addLayer({
 	'id': 'schools',
@@ -141,21 +125,10 @@ map.on('load', function () {
 	    },
 	    'icon-allow-overlap': true,
 	    'icon-keep-upright': true,
-	    'icon-size': 0.05
-	},
-	'paint': {
-	    'icon-opacity': {
-		'property': 'a',
-		'type': 'categorical',
-		'stops': [
-		    [0, 1],
-		    [1, 1],
-		    [2, 1],
-		    [3, 1],
-		    [4, 1],
-		    [5, 1]
-		]
-	    }
+	    'icon-size': {
+		'base': 0.12,
+		'stops': [[7, .12],[22, .25]]
+	    },
 	}
     });
     
