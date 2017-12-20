@@ -85,9 +85,10 @@ college <- read_csv(file.path(rdir, 'HD2015.zip')) %>%
            fips %in% cw$stfips) %>%
     mutate(lon = as.numeric(lon),
            lat = as.numeric(lat),
-           cat = ifelse(sector == 1, 2,
-                 ifelse(sector == 2, 3,
-                        sector))) %>%
+           cat = ifelse(sector == 1, 5,
+                 ifelse(sector == 2, 6,
+                 ifelse(sector == 4, 7,
+                 ifelse(sector == 5, 8, 0))))) %>%
     select(-sector) %>%
     filter(!is.na(lon),
            !is.na(lat))
@@ -116,16 +117,6 @@ hs <- read_csv(file.path(rdir, 'school_level_clean.csv')) %>%
     filter(!is.na(lon),
            !is.na(lat))
 
-## ## get district stuff to merge in
-## dist <- read_csv(file.path(rdir, 'district_level_clean.csv')) %>%
-##     setNames(tolower(names(.))) %>%
-##     select(nces_dist_id,
-##            district_name,
-##            district_enrollment_grade12,
-##            district_frl_pct,
-##            district_stu_cou_ratio,
-##            district_fafsa_pct)
-
 ## advising programs at school level
 advise <- read_csv(file.path(rdir, 'advising_program_school_clean.csv')) %>%
     setNames(tolower(names(.))) %>%
@@ -137,7 +128,10 @@ hs <- hs %>%
     ## left_join(dist) %>%
     left_join(advise) %>%
     select(-starts_with('nces_')) %>%
-    mutate(cat = ifelse(is.na(advise_org), 0, 1))
+    mutate(cat = ifelse(!is.na(advise_org) & !is.na(csr), 1,
+                 ifelse(is.na(advise_org) & !is.na(csr), 2,
+                 ifelse(!is.na(advise_org) & is.na(csr), 3,
+                 ifelse(is.na(advise_org) & is.na(csr), 4, 0)))))
 
 ################################################################################
 ## COMBINE & WRITE
@@ -152,11 +146,6 @@ df <- bind_rows(college, hs) %>%
            d = enroltot,                     # d := enrollment (hs)
            e = frlpct,                       # e := frpl pct (hs)
            f = csr,                          # f := stu/cou ratio (hs)
-           ## g = district_name,                # g := district name
-           ## h = district_enrollment_grade12,  # h := district enrollment g12
-           ## i = district_frl_pct,             # i := district frpl pct
-           ## j = district_stu_cou_ratio,       # j := district stu/cou ratio
-           ## k = district_fafsa_pct,           # k := district fafsa pct
            g = advise_org)                   # g := hs advising orgs
 
 ## set up as SP data frame

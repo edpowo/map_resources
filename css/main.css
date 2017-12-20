@@ -145,20 +145,20 @@ and (min-width: 1024px) {
 }
 
 #toggle a:hover {
-    background-color: #f8f8f8;
-    color: #404040;
+    background-color: #E57200;
+    color: #ffffff;
 }
 
 #toggle a.active {
-    background-color: #3887be;
+    background-color: #232D4B;
     color: #ffffff;
 }
 
 #toggle a.active:hover {
-    background: #3074a4;
+    background: #E57200;
 }
 
-/* side bar listing */
+/* Side bar listing */
 
 .col-sidebar fieldset {
     display: block;
@@ -211,6 +211,11 @@ and (min-width: 1024px) {
     font-size: 2rem;
     padding-right: .5rem;
     vertical-align: middle;
+}
+
+.square {
+    font-size: 2rem;
+    padding-right: .5rem;
 }
 
 table {

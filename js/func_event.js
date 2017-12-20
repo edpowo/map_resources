@@ -21,12 +21,14 @@ function setCollegeMarker(swToggle) {
 		'property': 'a',
 		'type': 'categorical',
 		'stops': [
-		    [0, 'schoolna'],
 		    [1, 'schoolad'],
-		    [2, opacity4],
-		    [3, opacity4],
-		    [4, opacity2],
-		    [5, opacity2]
+		    [2, 'schoolna'],
+		    [3, 'schooladnoc'],
+		    [4, 'schoolnanoc'],
+		    [5, opacity4],
+		    [6, opacity4],
+		    [7, opacity2],
+		    [8, opacity2]
 		]
     });
 }

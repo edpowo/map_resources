@@ -3,7 +3,7 @@ layout: default
 custom_css:
 - main
 custom_js:
-- index.map
+- index_map
 - func_general
 - func_popup
 - func_event

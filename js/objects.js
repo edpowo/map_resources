@@ -19,18 +19,6 @@ function School(feature) {
     this.enroll = s[feature.id].d || '-';
     this.frpl = s[feature.id].e || '-';
     this.csr = s[feature.id].f || '-';
-    this.advorgs = function() {
-	if (s[feature.id].g != undefined) {
-	    var advstr = s[feature.id].g;
-	    return advstr.split("|");
-	}
-    };
+    var advorgs = s[feature.id].g;
+    this.advorgs = (advorgs != undefined ? advorgs.split('|') : '-');
 }
-
-// function District(feature) {
-//     this.name = s[feature.id].g || '-';
-//     this.enroll = s[feature.id].h || '-';
-//     this.frpl = s[feature.id].i || '-';
-//     this.csr = s[feature.id].j || '-';
-//     this.fafsa = s[feature.id].k || '-';
-// }

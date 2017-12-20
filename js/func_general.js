@@ -16,3 +16,14 @@ function normalize(string) {
     return string.trim().toLowerCase();
 }
 
+// return label based on category
+function getCatLabel(value) {
+    return cats[value];
+}
+
+// filter to high schools (needed to flatten arrays)
+function filterToHS(hsarray) {
+    var filterArray = [['in','a'], hsarray];
+    return [].concat.apply([], filterArray);
+}
+

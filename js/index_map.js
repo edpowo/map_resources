@@ -69,39 +69,17 @@ map.on('load', function () {
 
     // ICONS ---------------------------------------------------------
 
-    // for (var icon in icons) {
-    // 	map.loadImage(icons[icon], function(error, image) {
-    // 	    if (error) throw error;
-    // 	    map.addImage(icon, image);
-    // 	});
-    // }
+    for (i=0;i<iconlist.length;i++) {
+	(function(j) {	// NB: wrap in new function b/c .loadImage is async
+    	    var file = '{{ site.baseurl }}{{ site.images }}/' + iconlist[j].file;
+    	    var name = iconlist[j].name;
+    	    map.loadImage(file, function(error, link) {
+    		if (error) throw error;
+    		map.addImage(name, link);
+    	    });
+	})(i);
+    }
 
-    map.loadImage('{{ site.baseurl }}{{ site.images }}/college-4-bg.png',
-    		  function(error, image) {
-    		      if (error) throw error;
-    		      map.addImage('college4', image);
-    		  });
-    map.loadImage('{{ site.baseurl }}{{ site.images }}/college-2-bg.png',
-    		  function(error, image) {
-    		      if (error) throw error;
-    		      map.addImage('college2', image);
-    		  });
-    map.loadImage('{{ site.baseurl }}{{ site.images }}/school-bg.png',
-    		  function(error, image) {
-    		      if (error) throw error;
-    		      map.addImage('schoolna', image);
-    		  });
-    map.loadImage('{{ site.baseurl }}{{ site.images }}/school-advising-bg.png',
-    		  function(error, image) {
-    		      if (error) throw error;
-    		      map.addImage('schoolad', image);
-    		  });
-    map.loadImage('{{ site.baseurl }}{{ site.images }}/transparent.png',
-    		  function(error, image) {
-    		      if (error) throw error;
-    		      map.addImage('transparent', image);
-    		  });
-    
     // LAYERS --------------------------------------------------------
 
     map.addLayer({
@@ -115,19 +93,21 @@ map.on('load', function () {
 		'property': 'a',
 		'type': 'categorical',
 		'stops': [
-		    [0, 'schoolna'],
 		    [1, 'schoolad'],
-		    [2, 'college4'],
-		    [3, 'college4'],
-		    [4, 'college2'],
-		    [5, 'college2']
+		    [2, 'schoolna'],
+		    [3, 'schooladnoc'],
+		    [4, 'schoolnanoc'],
+		    [5, 'college4'],
+		    [6, 'college4'],
+		    [7, 'college2'],
+		    [8, 'college2']
 		]
 	    },
 	    'icon-allow-overlap': true,
 	    'icon-keep-upright': true,
 	    'icon-size': {
-		'base': 0.12,
-		'stops': [[7, .12],[22, .25]]
+		'base': 0.11,
+		'stops': [[7, .11],[22, .26]]
 	    },
 	}
     });
@@ -141,7 +121,7 @@ map.on('load', function () {
     // POPUPS --------------------------------------------------------
 
     map.on('mousemove', 'schools', function(e) {
-	if (!(s[e.features[0].id].a < 2 && swToggle)) {
+	if (!(getCatLabel(s[e.features[0].id].a) === 'hs' && swToggle)) {
 	    map.getCanvas().style.cursor = 'pointer';
 	    popup.create(e.features[0]);
 	}
