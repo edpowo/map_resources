@@ -14,47 +14,90 @@ function eventFlyTo(feature, popup) {
 }
 
 // function to change marker color for colleges
-function setCollegeMarker(swToggle) {
-    var opacity4 = (swToggle ? 'transparent' : 'college4');
-    var opacity2 = (swToggle ? 'transparent' : 'college2');
-    map.setLayoutProperty('schools', 'icon-image', {
-		'property': 'a',
-		'type': 'categorical',
-		'stops': [
-		    [1, 'schoolad'],
-		    [2, 'schoolna'],
-		    [3, 'schooladnoc'],
-		    [4, 'schoolnanoc'],
-		    [5, opacity4],
-		    [6, opacity4],
-		    [7, opacity2],
-		    [8, opacity2]
-		]
-    });
+function setHSMarker(swToggleHS) {
+    if (swToggleHS) {
+	map.setLayoutProperty('schools',
+			      'icon-size',
+			      ['interpolate', ['linear'], ['zoom'],
+	    		       7, [
+	    			   '*',
+	    			   ['/', 1, ['to-number',
+	    				     ['get', 'f', ['at', ['get', 'z'], ['literal', s]]],
+	    				     1000]
+	    			   ],
+	    			   10],
+	    		       22, [
+	    			   '*',
+	    			   ['/', 1, ['to-number',
+	    				     ['get', 'f', ['at', ['get', 'z'], ['literal', s]]],
+	    				     1000]
+	    			   ],
+	    			   100]
+			      ]);
+    } else {
+	map.setLayoutProperty('schools',
+			      'icon-size',
+			      ['interpolate', ['linear'], ['zoom'],
+	    		       7, .1,
+	    		       22, 1
+			      ]);
+    }
+}
+
+// function to change marker color for colleges
+function setCollegeMarker(swToggleCollege) {
+    map.setLayoutProperty('schools',
+			  'icon-image',
+			  ['match',
+			   ['get', 'a', ['at', ['get', 'z'], ['literal', s]]],
+			   1, 'schoolad',
+			   2, 'schoolna',
+			   3, 'schooladnoc',
+			   4, 'schoolnanoc',
+			   5, opacityToggle(swToggleCollege, 'college4'),
+			   6, opacityToggle(swToggleCollege, 'college4'),
+			   7, opacityToggle(swToggleCollege, 'college2'),
+			   8, opacityToggle(swToggleCollege, 'college2'),
+			   'transparent']
+			 );
 }
 
 // toggle for colleges
-function createToggle() {
+function createToggle(type) {
     // init toggle to be active
     var toggle = document.createElement('a');
     toggle.href = '#';
     toggle.className = 'active';
-    toggle.textContent = 'hide colleges';
+    var textContent = (type == 'college' ?
+		       ['hide colleges', 'show college'] :
+		       ['HS size by student/counselor', 'HS size standard']);
+
+    toggle.textContent = textContent[0];
     // listener: on click
     toggle.onclick = function (e) {
 	e.preventDefault();
         e.stopPropagation();
     	if (this.className === '') {
     	    this.className = 'active';
-    	    this.textContent = 'hide colleges';
-	    swToggle = false;
-	    setCollegeMarker(swToggle);
+    	    this.textContent = textContent[0]
+	    if (type == 'college') {
+		swToggleCollege = false;
+		setCollegeMarker(swToggleCollege);
+	    } else {
+		swToggleHS = false;
+		setHSMarker(swToggleHS);
+	    }
 	    addToVisible();
     	} else {
     	    this.className = '';
-    	    this.textContent = 'show colleges';
-	    swToggle = true;
-	    setCollegeMarker(swToggle);
+    	    this.textContent = textContent[1]
+	    if (type == 'college') {
+		swToggleCollege = true;
+		setCollegeMarker(swToggleCollege);
+	    } else {
+		swToggleHS = true;
+		setHSMarker(swToggleHS);
+	    }
 	    addToVisible();
 	}
     };

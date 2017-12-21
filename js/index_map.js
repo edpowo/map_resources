@@ -40,7 +40,8 @@ elFilter.parentNode.style.display = 'none';
 
 var swFilter = false;
 var swNoFilterMatch = false;
-var swToggle = false;
+var swToggleCollege = false;
+var swToggleHS = false;
 
 // DATA ------------------------------------------------------------------------
 
@@ -81,7 +82,7 @@ map.on('load', function () {
     }
 
     // LAYERS --------------------------------------------------------
-
+   
     map.addLayer({
 	'id': 'schools',
 	'type': 'symbol',
@@ -89,26 +90,24 @@ map.on('load', function () {
 	'minzoom': 7,
 	'layout': {
 	    'visibility': 'visible',
-	    'icon-image': {
-		'property': 'a',
-		'type': 'categorical',
-		'stops': [
-		    [1, 'schoolad'],
-		    [2, 'schoolna'],
-		    [3, 'schooladnoc'],
-		    [4, 'schoolnanoc'],
-		    [5, 'college4'],
-		    [6, 'college4'],
-		    [7, 'college2'],
-		    [8, 'college2']
-		]
-	    },
+	    'icon-image': ['match',
+			   ['get', 'a', ['at', ['get', 'z'], ['literal', s]]],
+			   1, 'schoolad',
+			   2, 'schoolna',
+			   3, 'schooladnoc',
+			   4, 'schoolnanoc',
+			   5, 'college4',
+			   6, 'college4',
+			   7, 'college2',
+			   8, 'college2',
+			   'transparent'],
 	    'icon-allow-overlap': true,
 	    'icon-keep-upright': true,
-	    'icon-size': {
-		'base': 0.11,
-		'stops': [[7, .11],[22, .26]]
-	    },
+	    'icon-size': [
+		'interpolate', ['linear'], ['zoom'],
+		7, 0.1,
+		22, 1
+	    ]
 	}
     });
     
@@ -121,7 +120,8 @@ map.on('load', function () {
     // POPUPS --------------------------------------------------------
 
     map.on('mousemove', 'schools', function(e) {
-	if (!(getCatLabel(s[e.features[0].id].a) === 'hs' && swToggle)) {
+	if (!(getCatLabel(s[e.features[0].id].a) === 'hs'
+	      && swToggleCollege)) {
 	    map.getCanvas().style.cursor = 'pointer';
 	    popup.create(e.features[0]);
 	}
@@ -140,7 +140,8 @@ map.on('load', function () {
 
     // COLLEGE TOGGLE BUTTON -----------------------------------------
 
-    elToggle.appendChild(createToggle());
+    elToggle.appendChild(createToggle('college'));
+    elToggle.appendChild(createToggle('adjustcsr'));
     
     // CONTROLS ------------------------------------------------------
 

@@ -34,9 +34,9 @@ function renderListings(features) {
 	    return 0; 
 	});
 	// filter if colleges are toggled off
-	if (swToggle) {
+	if (swToggleCollege) {
 	    features = features.filter(function(feature) {
-		var cat = s[feature.id].a;
+		var cat = s[feature.properties.z].a;
 		return hsCats.indexOf(cat) > -1;
 	    });
 	}
@@ -97,7 +97,7 @@ function addToVisible() {
 	swNoFilterMatch = swFilter = false;
 	map.setFilter('schools', ['has', '$id']);
     }
-    var filter = (swToggle ? filterToHS(hsCats) : false);
+    var filter = (swToggleCollege ? iconFilterColleges() : false);
     // get rendered features 
     var features = map.queryRenderedFeatures({
 	layers :['schools'],

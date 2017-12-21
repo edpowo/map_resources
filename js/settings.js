@@ -44,8 +44,9 @@ var iconlist = [{'name': 'college4', 'file': 'college-4-bg.png'},
 		{'name': 'college2', 'file': 'college-2-bg.png'},
 		{'name': 'schoolna', 'file': 'school-bg.png'},
 		{'name': 'schoolad', 'file': 'school-advising-bg.png'},
-		{'name': 'schoolnanoc', 'file': 'school-bg-noc.png'},
-		{'name': 'schooladnoc', 'file':'school-advising-bg-noc.png'},
+		{'name': 'schoolnanoc', 'file': 'school-noc-bg.png'},
+		{'name': 'schooladnoc', 'file': 'school-advising-noc-bg.png'},
+		{'name': 'community', 'file': 'community-bg.png'},
 		{'name': 'transparent', 'file': 'transparent.png'}];
 
 // sector concordance
