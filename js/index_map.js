@@ -37,7 +37,8 @@ elFilter.parentNode.style.display = 'none';
 
 var swFilter = false;
 var swNoFilterMatch = false;
-var swToggle = false;
+var swToggleCollege = false;
+var swToggleHS = false;
 
 // DATA ------------------------------------------------------------------------
 
@@ -57,33 +58,53 @@ var data = (function() {
 // LOAD MAP --------------------------------------------------------------------
 map.on('load', function () {
 
-    // ADD DATA ------------------------------------------------------
+    // DATA ----------------------------------------------------------
   
     map.addSource('schools', {
     	type: 'geojson',
     	data: data
     });
 
-    // LAYERS --------------------------------------------------------
+    // ICONS ---------------------------------------------------------
 
+    for (i=0;i<iconlist.length;i++) {
+	(function(j) {	// NB: wrap in new function b/c .loadImage is async
+    	    var file = '/map_resources/images/' + iconlist[j].file;
+    	    var name = iconlist[j].name;
+    	    map.loadImage(file, function(error, link) {
+    		if (error) throw error;
+    		map.addImage(name, link);
+    	    });
+	})(i);
+    }
+
+    // LAYERS --------------------------------------------------------
+   
     map.addLayer({
-    	'id': 'schools',
-    	'type': 'circle',
-    	'source': 'schools',
-    	'minzoom': 7,
-    	'layout': {
-	    'visibility': 'visible'
-	},
-	'paint': {
-	    'circle-radius': 6,
-	    'circle-color': {
-		property: 'm',
-		type: 'categorical',
-		stops: [
-		    [0, getColor(rtorange)],
-		    [1, getColor(jeffblue)]
-		]
-	    }
+	'id': 'schools',
+	'type': 'symbol',
+	'source': 'schools',
+	'minzoom': 7,
+	'layout': {
+	    'visibility': 'visible',
+	    'icon-image': ['match',
+			   ['get', 'a', ['at', ['get', 'z'], ['literal', s]]],
+			   1, 'schoolad',
+			   2, 'schoolna',
+			   3, 'schooladnoc',
+			   4, 'schoolnanoc',
+			   5, 'college4',
+			   6, 'college4',
+			   7, 'college2',
+			   8, 'college2',
+			   'transparent'],
+	    'icon-allow-overlap': true,
+	    'icon-keep-upright': true,
+	    'icon-size': [
+		'interpolate', ['linear'], ['zoom'],
+		7, 0.1,
+		22, 1
+	    ]
 	}
     });
     
@@ -96,7 +117,8 @@ map.on('load', function () {
     // POPUPS --------------------------------------------------------
 
     map.on('mousemove', 'schools', function(e) {
-	if (!(s[e.features[0].id].m == 1 && swToggle)) {
+	if (!(getCatLabel(s[e.features[0].id].a) === 'hs'
+	      && swToggleCollege)) {
 	    map.getCanvas().style.cursor = 'pointer';
 	    popup.create(e.features[0]);
 	}
@@ -115,7 +137,8 @@ map.on('load', function () {
 
     // COLLEGE TOGGLE BUTTON -----------------------------------------
 
-    elToggle.appendChild(createToggle());
+    elToggle.appendChild(createToggle('college'));
+    elToggle.appendChild(createToggle('adjustcsr'));
     
     // CONTROLS ------------------------------------------------------
 

@@ -26,21 +26,30 @@ function renderListings(features) {
 	elFilter.style.color = '#000';
 	// sort so that they are listed alphabetically in list
 	features.sort(function(x,y) {
-	    if(s[x.id].a < s[y.id].a) return -1;
-	    if(s[x.id].a > s[y.id].a) return 1;
+	    if(s[x.id].b < s[y.id].b) return -1;
+	    if(s[x.id].b > s[y.id].b) return 1;
 	    return 0; 
 	});
+	// filter if colleges are toggled off
+	if (swToggleCollege) {
+	    features = features.filter(function(feature) {
+		var cat = s[feature.properties.z].a;
+		return hsCats.indexOf(cat) > -1;
+	    });
+	}
 	// for each visible feature...
         features.forEach(function(feature) {
 	    // school object
 	    var school = new School(feature);
-	    // change bullet color based on whether HS or College
-	    var bc = (school.iscollege ? getColor(jeffblue) : getColor(rtorange));
+	    // icon type
+	    var icon = getCatLabel(school.cat);
 	    // create item for list
 	    var item = document.createElement('a');
 	    item.href = '#';
-	    item.innerHTML = "<span class='bullet' style='color:"
-		+ bc + ";'>&bull;</span>" + school.name;
+	    item.innerHTML = "<span class=" + bullets[icon].class
+		+ " style='color:"
+		+ bullets[icon].color + "'>"
+		+ bullets[icon].shape + "</span>" + school.name;
 	    // listener: fly to and make active if clicked
 	    item.addEventListener('click', function() {
 		eventFlyTo(feature, popup);
@@ -85,7 +94,7 @@ function addToVisible() {
 	swNoFilterMatch = swFilter = false;
 	map.setFilter('schools', ['has', '$id']);
     }
-    var filter = (swToggle ? ['==','m',0] : false);
+    var filter = (swToggleCollege ? iconFilterColleges() : false);
     // get rendered features 
     var features = map.queryRenderedFeatures({
 	layers :['schools'],
@@ -112,7 +121,7 @@ function textFilter(e, visible) {
     var inputText = normalize(e.target.value);
     // remove visible features that don't match the input value.
     var filtered = visible.filter(function(feature) {
-        var name = normalize(s[feature.id].a);
+        var name = normalize(s[feature.id].b);
         return name.indexOf(inputText) > -1;
     });
     // populate the sidebar with filtered results
