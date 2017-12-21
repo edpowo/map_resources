@@ -41,10 +41,12 @@ str_to_title_mod <- function(x) {
 writeJSArray <- function(df, array_name, vars, outfile) {
 
     df <- df[,names(df) %in% vars]
-    lines <- paste0(array_name,'=[]')
+    ## maintain 1 index (JS is zero-index) for sanity
+    lines <- paste0(array_name,'=[{}')
 
     for (i in 1:nrow(df)) {
-        line <- paste0(array_name, '[', i, ']={')
+        ## line <- paste0(array_name, '[', i, ']={')
+        line <- paste0('{')
         for (v in 1:length(vars)) {
             if (!is.na(df[i, grep(vars[v], names(df))])) {
                 if (v == 1) {
@@ -62,11 +64,10 @@ writeJSArray <- function(df, array_name, vars, outfile) {
             }
         }
         line <- paste0(line, '}')
+        if (i == nrow(df)) { line <- paste0(line, '];') }
         lines <- c(lines,line)
     }
-
-    writeLines(lines, outfile, sep = ';')
-
+    writeLines(paste(lines, collapse = ','), outfile)
 }
 
 ################################################################################
@@ -139,8 +140,9 @@ hs <- hs %>%
 
 ## bind
 df <- bind_rows(college, hs) %>%
+    mutate(z = row_number()) %>%             # redundant id #
     ## rename for very small names
-    rename(a = cat,                          # a := cateogry
+    rename(a = cat,                          # a := category
            b = instnm,                       # b := name
            c = fips,                         # c := fips
            d = enroltot,                     # d := enrollment (hs)
@@ -150,7 +152,7 @@ df <- bind_rows(college, hs) %>%
 
 ## set up as SP data frame
 lonlat <- df %>% select(lon, lat) %>% as.matrix()
-dfsp <- SpatialPointsDataFrame(lonlat, df %>% select(a),
+dfsp <- SpatialPointsDataFrame(lonlat, df %>% select(z),
                                proj4string = CRS('+init=epsg:3857'))
 
 ## write as geojson
