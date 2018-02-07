@@ -3,14 +3,14 @@ layout: default
 custom_css:
 - main
 custom_js:
-- index_map
 - func_general
 - func_popup
 - func_event
 - func_mapping
-- objects
 - settings
-- school_array
+- objects_arrays
+- icon_array
+- index_map
 ---
 
 <div class='container'>
@@ -18,12 +18,18 @@ custom_js:
 	<h2 class='side'>College Advising Resource Map</h2>
 		<div id='instructions'>
 		<p>Use this interactive map to explore college advising resources
-	available at high schools across the country.</p>
+	available in high schools and communities across the country.</p>
 		<h3>Instructions</h3>
-		<p><b>Search</b> for specific location using place name or zip code.</p>
-		<p><b>Use location button</b> button to explore current
+		<p><b>Search</b> for specific location using place name or zip
+	code. For example, search "Charlottesville, VA" or "22901"</p>
+		<p><b>Use location button</b> to explore current
 	location.</p>
 		<p><b>Drag and zoom</b> using buttons or on map itself.</p>
+		<p>Click the toggle buttons in the upper left to: </p>
+		<ul>
+		<li>Hide college icons</li>
+		<li>Resize high school icon size by student/counselor ratio (SCR)</li>
+		</ul>
 		</div>
 		<div>
 			<fieldset>

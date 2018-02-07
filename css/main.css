@@ -213,6 +213,12 @@ and (min-width: 1024px) {
     vertical-align: middle;
 }
 
+.triangle {
+    font-size: 1.25rem;
+    /* padding-right: .5rem; */
+    vertical-align: middle;
+}
+
 .square {
     font-size: 2rem;
     padding-right: .5rem;

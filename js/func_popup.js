@@ -16,29 +16,42 @@ mapboxgl.Popup.prototype.text = function(feature) {
     // init popup format string
     var htmlstr;
     // get information
-    var school = new School(feature);
+    var icon = new Icon(feature);
     // is HS?
-    var isHS = (getCatLabel(school.cat) === 'hs');
+    var lab = getCatLabel(icon.cat);
+    isHS = (/hs|hs_adv/.exec(lab));
+    isCM = (lab === 'community');
 
     if (isHS) {
-	htmlstr = "<h2>" + school.name + "</h2>";
+	htmlstr = "<h2>" + icon.name + "</h2>";
 	htmlstr += "<table>";
-	htmlstr += "<tr><td>12th grade enrollment</td>"
-	    + "<td class = 'num'>" + school.enroll + "</td></tr>";
+	htmlstr += "<tr><td>School enrollment</td>"
+	    + "<td class = 'num'>" + icon.enroll + "</td></tr>";
 	htmlstr += "<tr><td>FRPL (%)</td>"
-	    + "<td class = 'num'>" + school.frpl + "</td></tr>";
+	    + "<td class = 'num'>" + icon.frpl + "</td></tr>";
+	if (icon.csr_flag == 1) {
+	    var csr = '-';
+	} else {
+	    var csr = icon.csr;
+	}
 	htmlstr += "<tr><td>Students per counselor</td>"
-	    + "<td class = 'num'>" + school.csr + "</td></tr>";
+	    + "<td class = 'num'>" + csr + "</td></tr>";
 	htmlstr += "</table>";
-	if (school.advorgs !== '-') {
+	if (icon.advorgs !== '-') {
 	    htmlstr += "<h2>Advising organizations</h2>";
-	    for (i = 0; i < school.advorgs.length; i++) {
-		htmlstr += school.advorgs[i] + "</br>";
+	    for (i = 0; i < icon.advorgs.length; i++) {
+		htmlstr += icon.advorgs[i] + "</br>";
 	    }
 	}
+    } else if (isCM) {
+	htmlstr = "<h2> Zip code: " + icon.zip + "</h2>";
+	htmlstr += "<h2>Advising organizations</h2>";
+	    for (i = 0; i < icon.advorgs.length; i++) {
+		htmlstr += icon.advorgs[i] + "</br>";
+	    }
     } else {
-	htmlstr = "<h2>" + school.name + "</h2>";
-	htmlstr += "<b>Sector: </b>" + sector[school.cat];
+	htmlstr = "<h2>" + icon.name + "</h2>";
+	htmlstr += "<b>Sector: </b>" + sector[icon.cat];
     }
     return htmlstr;
 }

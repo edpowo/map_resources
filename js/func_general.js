@@ -1,7 +1,9 @@
 ---
 ---
 
-// GENERAL FUNCTIONS -----------------------------------------------------------
+// -----------------------------------------------------------------------------
+// GENERAL FUNCTIONS
+// -----------------------------------------------------------------------------
 
 // color function
 function getColor(color) {
@@ -22,10 +24,10 @@ function getCatLabel(value) {
 }
 
 // ids that are not colleges
-function filterIcons(schoolarray, droptype) {
+function filterIcons(iconarray, droptype) {
     outArray = [];
-    for(i=1;i<schoolarray.length;i++) {// NB: start at 1 b/c s is one-index
-	if (getCatLabel[schoolarray[i].a] !== droptype) {
+    for(i=1;i<iconarray.length;i++) {// NB: start at 1 b/c s is one-index
+	if (getCatLabel[iconarray[i][_cat]] !== droptype) {
 	    outArray.push(i);
 	}
     }
@@ -34,12 +36,21 @@ function filterIcons(schoolarray, droptype) {
 
 // filter to high schools (needed to flatten arrays)
 function iconFilterColleges() {
-    var filterArray = [['in','z'], filterIcons(s, 'college')];
+    var filterArray = [['in', _id], filterIcons(s, 'college')];
     return [].concat.apply([], filterArray);
 }
 
 // function to switch between transparent and valued icon
 function opacityToggle(toggle, output) {
     return (toggle ? 'transparent' : output);
+}
+
+// function to return percentile value
+function findPercentile(array, p) {
+    array.sort(function(a,b) {return a-b});
+    var i = array.length * p;
+    var fi = Math.floor(i);
+    var v = (fi == i) ? (array[i-1] + array[i])/2 : array[fi];
+    return v;
 }
 

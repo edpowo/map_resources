@@ -29,30 +29,35 @@ function renderListings(features) {
 	elFilter.style.color = '#000';
 	// sort so that they are listed alphabetically in list
 	features.sort(function(x,y) {
-	    if(s[x.id].b < s[y.id].b) return -1;
-	    if(s[x.id].b > s[y.id].b) return 1;
+	    if(s[x.id][_name] < s[y.id][_name]) return -1;
+	    if(s[x.id][_name] > s[y.id][_name]) return 1;
 	    return 0; 
 	});
 	// filter if colleges are toggled off
 	if (swToggleCollege) {
 	    features = features.filter(function(feature) {
-		var cat = s[feature.properties.z].a;
+		var cat = s[feature.properties[_id]][_cat];
 		return hsCats.indexOf(cat) > -1;
 	    });
 	}
 	// for each visible feature...
         features.forEach(function(feature) {
 	    // school object
-	    var school = new School(feature);
+	    var icon = new Icon(feature);
 	    // icon type
-	    var icon = getCatLabel(school.cat);
+	    var icon_cat = getCatLabel(icon.cat);
 	    // create item for list
 	    var item = document.createElement('a');
 	    item.href = '#';
-	    item.innerHTML = "<span class=" + bullets[icon].class
+	    item.innerHTML = "<span class=" + bullets[icon_cat].class
 		+ " style='color:"
-		+ bullets[icon].color + "'>"
-		+ bullets[icon].shape + "</span>" + school.name;
+		+ bullets[icon_cat].color + "'>"
+		+ bullets[icon_cat].shape + "</span>";
+	    if (icon_cat === 'community') {
+		item.innerHTML +=  "Zip code: " + icon.zip;
+	    } else {
+		item.innerHTML += icon.name;
+	    }
 	    // listener: fly to and make active if clicked
 	    item.addEventListener('click', function() {
 		eventFlyTo(feature, popup);
@@ -87,7 +92,7 @@ function renderListings(features) {
 	}
 	empty.textContent = message;
 	// remove features filter
-        map.setFilter('schools', ['has', '$id']);
+        map.setFilter('icons', ['has', '$id']);
     }
 }
 
@@ -95,12 +100,12 @@ function addToVisible() {
     // reset if bad input in filter
     if (swNoFilterMatch) {
 	swNoFilterMatch = swFilter = false;
-	map.setFilter('schools', ['has', '$id']);
+	map.setFilter('icons', ['has', '$id']);
     }
     var filter = (swToggleCollege ? iconFilterColleges() : false);
     // get rendered features 
     var features = map.queryRenderedFeatures({
-	layers :['schools'],
+	layers :['icons'],
 	filter : filter
     });   
     if (features) {
@@ -116,7 +121,7 @@ function addToVisible() {
     }
 }
 
-// function to filter schools with text input
+// function to filter icons with text input
 function textFilter(e, visible) {
     // set switch
     swFilter = true;
@@ -124,13 +129,13 @@ function textFilter(e, visible) {
     var inputText = normalize(e.target.value);
     // remove visible features that don't match the input value.
     var filtered = visible.filter(function(feature) {
-        var name = normalize(s[feature.id].b);
+        var name = normalize(s[feature.id][_name]);
         return name.indexOf(inputText) > -1;
     });
     // populate the sidebar with filtered results
     renderListings(filtered);
     // set the filter to populate features into the layer
-    map.setFilter('schools', ['in', '$id'].concat(filtered.map(function(feature) {
+    map.setFilter('icons', ['in', '$id'].concat(filtered.map(function(feature) {
         return feature.id;
     })));
     popup.remove();  

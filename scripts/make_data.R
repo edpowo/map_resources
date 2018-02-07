@@ -118,6 +118,11 @@ hs <- read_csv(file.path(rdir, 'school_level_clean.csv')) %>%
     filter(!is.na(lon),
            !is.na(lat))
 
+hs_imp <- hs %>%
+    group_by(fips) %>%
+    summarise(csr_mean = mean(csr, na.rm = TRUE)) %>%
+    ungroup()
+
 ## advising programs at school level
 advise <- read_csv(file.path(rdir, 'advising_program_school_clean.csv')) %>%
     setNames(tolower(names(.))) %>%
@@ -128,18 +133,47 @@ advise <- read_csv(file.path(rdir, 'advising_program_school_clean.csv')) %>%
 hs <- hs %>%
     ## left_join(dist) %>%
     left_join(advise) %>%
+    left_join(hs_imp) %>%
     select(-starts_with('nces_')) %>%
-    mutate(cat = ifelse(!is.na(advise_org) & !is.na(csr), 1,
+    mutate(csr_flag = as.integer(is.na(csr)),
+           csr = ifelse(is.na(csr), csr_mean, csr),
+           cat = ifelse(!is.na(advise_org) & !is.na(csr), 1,
                  ifelse(is.na(advise_org) & !is.na(csr), 2,
                  ifelse(!is.na(advise_org) & is.na(csr), 3,
                  ifelse(is.na(advise_org) & is.na(csr), 4, 0)))))
+
+## -------------------------------------
+## COMMUNITY
+## -------------------------------------
+
+## advising programs at school level
+community <- read_csv(file.path(rdir, 'advising_program_community_clean.csv')) %>%
+    setNames(tolower(names(.))) %>%
+    unite(advise_org, c('org_1','org_2','org_3'), sep = '|') %>%
+    mutate(advise_org = gsub('\\|NA$|\\|NA\\|NA$', '', advise_org),
+           zip = sprintf('%05d', zip))
+
+## get zipcode geo
+zipgeo <- read_tsv(file.path(rdir, '2016_Gaz_zcta_national.zip')) %>%
+    setNames(tolower(names(.))) %>%
+    mutate(zip = geoid,
+           lon = intptlong,
+           lat = intptlat) %>%
+    select(zip, lon, lat)
+
+## merge to community
+community <- community %>%
+    left_join(zipgeo) %>%
+    mutate(cat = 9) %>%
+    ## need to fix!
+    na.omit()
 
 ################################################################################
 ## COMBINE & WRITE
 ################################################################################
 
 ## bind
-df <- bind_rows(college, hs) %>%
+df <- bind_rows(college, hs, community) %>%
     mutate(z = row_number()) %>%             # redundant id #
     ## rename for very small names
     rename(a = cat,                          # a := category
@@ -148,7 +182,9 @@ df <- bind_rows(college, hs) %>%
            d = enroltot,                     # d := enrollment (hs)
            e = frlpct,                       # e := frpl pct (hs)
            f = csr,                          # f := stu/cou ratio (hs)
-           g = advise_org)                   # g := hs advising orgs
+           g = advise_org,                   # g := hs advising orgs
+           h = csr_flag,                     # h := missing csr
+           i = zip)                          # i := zip code
 
 ## set up as SP data frame
 lonlat <- df %>% select(lon, lat) %>% as.matrix()
@@ -156,10 +192,10 @@ dfsp <- SpatialPointsDataFrame(lonlat, df %>% select(z),
                                proj4string = CRS('+init=epsg:3857'))
 
 ## write as geojson
-geojson_write(input = dfsp, file = file.path(ddir, 'schools.geojson'))
+geojson_write(input = dfsp, file = file.path(ddir, 'icons.geojson'))
 
 ## write data as minified JS
-writeJSArray(df, 's', letters[1:7], file.path(jdir, 'school_array.js'))
+writeJSArray(df, 's', letters[1:9], file.path(jdir, 'icon_array.js'))
 
 ## =============================================================================
 ## END FILE

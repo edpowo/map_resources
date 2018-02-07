@@ -49,7 +49,7 @@ var data = (function() {
     var data = null;
     $.ajax({
 	'async': false,
-	'url': '{{ site.baseurl }}/data/schools.geojson',
+	'url': '{{ site.baseurl }}/data/icons.geojson',
 	'dataType': 'json',
 	'success':  function(data) {
 	    json = data;
@@ -63,10 +63,23 @@ map.on('load', function () {
 
     // DATA ----------------------------------------------------------
   
-    map.addSource('schools', {
+    map.addSource('icons', {
     	type: 'geojson',
     	data: data
     });
+
+    // XITLES --------------------------------------------------------
+
+    var scr = [];
+    for (i=0;i<s.length;i++) {
+	if (typeof s[i][_csr] !== 'undefined' && s[i][_csr] !== null) {
+	    scr.push(s[i][_csr]);
+	}
+    }
+    var colPct = findPercentile(scr, scale_colPct);
+    var comPct = findPercentile(scr, scale_comPct);
+    var scr_min = findPercentile(scr, scale_hs_min);
+    var scr_max = findPercentile(scr, scale_hs_max);
 
     // ICONS ---------------------------------------------------------
 
@@ -84,14 +97,14 @@ map.on('load', function () {
     // LAYERS --------------------------------------------------------
    
     map.addLayer({
-	'id': 'schools',
+	'id': 'icons',
 	'type': 'symbol',
-	'source': 'schools',
-	'minzoom': 7,
+	'source': 'icons',
+	'minzoom': minIconZoom,
 	'layout': {
 	    'visibility': 'visible',
 	    'icon-image': ['match',
-			   ['get', 'a', ['at', ['get', 'z'], ['literal', s]]],
+			   ['get', _cat, ['at', ['get', _id], ['literal', s]]],
 			   1, 'schoolad',
 			   2, 'schoolna',
 			   3, 'schooladnoc',
@@ -100,13 +113,14 @@ map.on('load', function () {
 			   6, 'college4',
 			   7, 'college2',
 			   8, 'college2',
+			   9, 'community',
 			   'transparent'],
 	    'icon-allow-overlap': true,
 	    'icon-keep-upright': true,
 	    'icon-size': [
 		'interpolate', ['linear'], ['zoom'],
-		7, 0.1,
-		22, 1
+		minIconZoom, 0.1,
+		maxIconZoom, 1
 	    ]
 	}
     });
@@ -119,15 +133,14 @@ map.on('load', function () {
 
     // POPUPS --------------------------------------------------------
 
-    map.on('mousemove', 'schools', function(e) {
-	if (!(getCatLabel(s[e.features[0].id].a) === 'hs'
-	      && swToggleCollege)) {
+    map.on('mousemove', 'icons', function(e) {
+	if (!(swToggleCollege && getCatLabel(s[e.features[0].id][_cat]) === 'college')) {
 	    map.getCanvas().style.cursor = 'pointer';
 	    popup.create(e.features[0]);
 	}
     });
 
-    map.on('mouseleave', 'schools', function() {
+    map.on('mouseleave', 'icons', function() {
         map.getCanvas().style.cursor = '';
         popup.remove();
     });
@@ -140,8 +153,8 @@ map.on('load', function () {
 
     // COLLEGE TOGGLE BUTTON -----------------------------------------
 
-    elToggle.appendChild(createToggle('college'));
-    elToggle.appendChild(createToggle('adjustcsr'));
+    elToggle.appendChild(createToggle('college', colPct, comPct, scr_min, scr_max));
+    elToggle.appendChild(createToggle('adjustcsr', colPct, comPct, scr_min, scr_max));
     
     // CONTROLS ------------------------------------------------------
 
@@ -157,13 +170,19 @@ map.on('load', function () {
             enableHighAccuracy: true
     	},
     	fitBoundsOptions: {
-    	    maxZoom: 12
+    	    maxZoom: flyToZoom
     	},
     	trackUserLocation: false
     }));
 
     // add zoom and rotation controls to the map.
     map.addControl(new mapboxgl.NavigationControl());
+
+    // add scale control
+    map.addControl(new mapboxgl.ScaleControl({
+	maxWidth: scaleControlWidth,
+	unit: 'imperial'
+    }));
 
     // INIT EMPTY LISTINGS -------------------------------------------
     
