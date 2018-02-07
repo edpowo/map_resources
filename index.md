@@ -20,14 +20,15 @@ custom_js:
 		<p>Use this interactive map to explore college advising resources
 	available in high schools and communities across the country.</p>
 		<h3>Instructions</h3>
-		<p><b>Search</b> for specific location using place name or zip
-	code. For example, search "Charlottesville, VA" or "22901"</p>
-		<p><b>Use location button</b> to explore current
-	location.</p>
-		<p><b>Drag and zoom</b> using buttons or on map itself.</p>
+		<p><img src='{{ site.baseurl }}{{ site.images }}/search.png' class='icon'>
+			<b>Search</b> using place name ("Charlottesville, VA") or zip code ("22901")</p>
+		<p><img src='{{ site.baseurl }}{{ site.images }}/locate.png' class='icon'>
+			<b>Use the location button</b> to zoom to your current location.</p>
+		<p><i class='far fa-hand-pointer fa-lg' style='padding-right:.5rem;'></i>
+			<b>Drag, click, and zoom</b> to manually explore.</p>
 		<p>Click the toggle buttons in the upper left to: </p>
 		<ul>
-		<li>Hide college icons</li>
+		<li>Hide / show college icons</li>
 		<li>Resize high school icon size by student/counselor ratio (SCR)</li>
 		</ul>
 		</div>

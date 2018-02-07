@@ -231,3 +231,8 @@ table {
 .num {
     text-align: center;
 }
+
+.icon {
+    width: 3%;
+    padding-right: .5rem;
+}
