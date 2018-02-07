@@ -30,12 +30,19 @@
 	<h2 class="side">College Advising Resource Map</h2>
 		<div id="instructions">
 		<p>Use this interactive map to explore college advising resources
-	available at high schools across the country.</p>
+	available in high schools and communities across the country.</p>
 		<h3>Instructions</h3>
-		<p><b>Search</b> for specific location using place name or zip code.</p>
-		<p><b>Use location button</b> button to explore current
-	location.</p>
-		<p><b>Drag and zoom</b> using buttons or on map itself.</p>
+		<p><img src="/map_resources/images/search.png" class="icon" />
+			<b>Search</b> using place name ("Charlottesville, VA") or zip code ("22901")</p>
+		<p><img src="/map_resources/images/locate.png" class="icon" />
+			<b>Use the location button</b> to zoom to your current location.</p>
+		<p><i class="far fa-hand-pointer fa-lg" style="padding-right:.5rem;"></i>
+			<b>Drag, click, and zoom</b> to manually explore.</p>
+		<p>Click the toggle buttons in the upper left to: </p>
+		<ul>
+		<li>Hide / show college icons</li>
+		<li>Resize high school icon size by student/counselor ratio (SCR)</li>
+		</ul>
 		</div>
 		<div>
 			<fieldset>
@@ -55,9 +62,8 @@
     <script src="https://api.mapbox.com/mapbox-gl-js/v0.42.2/mapbox-gl.js"></script>
     <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.1.1/mapbox-gl-geocoder.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
     
-    
-    <script src="/map_resources/js/index_map.js" type="text/javascript"></script>
     
     <script src="/map_resources/js/func_general.js" type="text/javascript"></script>
     
@@ -67,11 +73,13 @@
     
     <script src="/map_resources/js/func_mapping.js" type="text/javascript"></script>
     
-    <script src="/map_resources/js/objects.js" type="text/javascript"></script>
-    
     <script src="/map_resources/js/settings.js" type="text/javascript"></script>
     
-    <script src="/map_resources/js/school_array.js" type="text/javascript"></script>
+    <script src="/map_resources/js/objects_arrays.js" type="text/javascript"></script>
+    
+    <script src="/map_resources/js/icon_array.js" type="text/javascript"></script>
+    
+    <script src="/map_resources/js/index_map.js" type="text/javascript"></script>
     
     
 

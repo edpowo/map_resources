@@ -1,32 +1,93 @@
-// categories
+// -----------------------------------------------------------------------------
+// SCALE OF ICONS ON HS RESIZE (1 - VALUE [0-1])
+// -----------------------------------------------------------------------------
+
+var scale_hs_min = 1 - .90;	// values > 90th xtile clipped down
+var scale_hs_max = 1 - .10;	// values < 10th xtile scaled up
+
+var scale_colPct = 1 - .75;	// college icons 70th xtile of HS csr
+var scale_comPct = 1 - .90;	// community icons 90th xtile of HS csr
+
+// -----------------------------------------------------------------------------
+// MIN / MAX ZOOM FOR ICONS VISIBILITY / SCALING (0 - 24) 
+// -----------------------------------------------------------------------------
+
+var minIconZoom = 6;
+var maxIconZoom = 22;
+
+// -----------------------------------------------------------------------------
+// FLYTO ZOOM (0 - 24)
+// -----------------------------------------------------------------------------
+
+var flyToZoom = 12;
+
+// -----------------------------------------------------------------------------
+// SCALE CONTROL WIDTH (px)
+// -----------------------------------------------------------------------------
+
+var scaleControlWidth = 250;
+
+// -----------------------------------------------------------------------------
+// SCHOOL ARRAY MAPPING (array `s`)
+// -----------------------------------------------------------------------------
+
+// (confirm with scripts/make_data.R)
+
+var _cat  = 'a';		// a := category
+var _name = 'b';		// b := name
+var _fips = 'c';		// c := fips
+var _enrl = 'd';		// d := enrollment (hs)
+var _frpl = 'e';		// e := frpl pct (hs)
+var _csr  = 'f';		// f := stu/cou ratio (hs)
+var _advo = 'g';		// g := hs advising orgs
+var _csrf = 'h';		// h := hs missing csr
+var _zip  = 'i';		// i := zip code
+
+// -----------------------------------------------------------------------------
+// GEO DATA ID 
+// -----------------------------------------------------------------------------
+
+// (confirm with scripts/make_data.R)
+
+var _id = 'z';
+
+// -----------------------------------------------------------------------------
+// ICON CATEGORIES (HIGH SCHOOL / COLLEGE / COMMUNITY)
+// -----------------------------------------------------------------------------
+
+// (confirm with scripts/make_data.R)
+
 var cats = [];
 cats[0] = undefined;
-cats[1] = 'hs';
+cats[1] = 'hs_adv';
 cats[2] = 'hs';
-cats[3] = 'hs';
+cats[3] = 'hs_adv';
 cats[4] = 'hs';
 cats[5] = 'college';
 cats[6] = 'college';
 cats[7] = 'college';
 cats[8] = 'college';
+cats[9] = 'community';
 
-// hs categories
-var hsCats = [];
-var idx = cats.indexOf('hs');
-while (idx != -1) {
-    hsCats.push(idx);
-    idx = cats.indexOf('hs', idx + 1);
-}
+// -----------------------------------------------------------------------------
+// MAPPING COLORS (red, green, blue, alpha)
+// -----------------------------------------------------------------------------
 
-// colors
-var jeffblue = {r:'35',g:'45',b:'75',a:'1'};
-var rtorange = {r:'229',g:'114',b:'0',a:'1'};
-var advgreen = {r:'101',g:'152',b:'35',a:'1'};
-var commgold = {r:'191',g:'166',b:'22',a:'1'};
+var jeffblue = {r:'035',g:'045',b:'075',a:'1'};
+var rtorange = {r:'229',g:'114',b:'000',a:'1'};
+var advgreen = {r:'101',g:'152',b:'035',a:'1'};
+var commgold = {r:'191',g:'166',b:'022',a:'1'};
 var zeroalph = {r:'255',g:'255',b:'255',a:'0'};
+
+// -----------------------------------------------------------------------------
+// LISTING BULLETS (color, shape, and type)
+// -----------------------------------------------------------------------------
 
 // listing bullet types and colors
 var bullets = {'hs': {'color': getColor(rtorange),
+		      'shape': '&#x25CF;',
+		      'class':'bullet'},
+	       'hs_adv': {'color': getColor(advgreen),
 		      'shape': '&#x25CF;',
 		      'class':'bullet'},
 	       'college': {'color': getColor(jeffblue),
@@ -34,9 +95,12 @@ var bullets = {'hs': {'color': getColor(rtorange),
 			   'class':'square'},
 	       'community': {'color': getColor(commgold),
 			     'shape': '&#x25B2;',
-			     'class':'bullet'}}
+			     'class':'triangle'}};
 
-// icons
+// -----------------------------------------------------------------------------
+// ICONS (name, file)
+// -----------------------------------------------------------------------------
+
 var iconlist = [{'name': 'college4', 'file': 'college-4-bg.png'},
 		{'name': 'college2', 'file': 'college-2-bg.png'},
 		{'name': 'schoolna', 'file': 'school-bg.png'},
@@ -46,13 +110,19 @@ var iconlist = [{'name': 'college4', 'file': 'college-4-bg.png'},
 		{'name': 'community', 'file': 'community-bg.png'},
 		{'name': 'transparent', 'file': 'transparent.png'}];
 
-// sector concordance
+// -----------------------------------------------------------------------------
+// COLLEGE SECTOR MAPPING FOR POPUP
+// -----------------------------------------------------------------------------
+
 var sector = {'5':'Public four-year',
 	      '6':'Private, not-for-profit four-year',
 	      '7':'Public two-year',
 	      '8':'Private, not-for-profit two-year'};
 
-// messages
+// -----------------------------------------------------------------------------
+// MESSAGES FOR TEXT ENTRY
+// -----------------------------------------------------------------------------
+
 var messages = ['Zoom or drag the map to populate results',
 		'Check spelling or drag the map to re-populate results'];
 
