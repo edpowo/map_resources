@@ -32,3 +32,11 @@ while (idx != -1) {
     hsCats.push(idx);
     idx = cats.indexOf('hs_adv', idx + 1);
 }
+
+// non-college categories
+var nonCollegeCats = hsCats;
+var idx = cats.indexOf('community');
+while (idx != -1) {
+    nonCollegeCats.push(idx);
+    idx = cats.indexOf('community', idx + 1);
+}

@@ -34,7 +34,7 @@ function renderListings(features) {
 	if (swToggleCollege) {
 	    features = features.filter(function(feature) {
 		var cat = s[feature.properties[_id]][_cat];
-		return hsCats.indexOf(cat) > -1;
+		return nonCollegeCats.indexOf(cat) > -1;
 	    });
 	}
 	// for each visible feature...
