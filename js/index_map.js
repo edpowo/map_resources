@@ -41,7 +41,7 @@ elFilter.parentNode.style.display = 'none';
 var swFilter = false;
 var swNoFilterMatch = false;
 var swToggleCollege = false;
-var swToggleHS = false;
+var swToggleHS = true;		// default: scale size by csr
 
 // DATA ------------------------------------------------------------------------
 
@@ -119,8 +119,34 @@ map.on('load', function () {
 	    'icon-keep-upright': true,
 	    'icon-size': [
 		'interpolate', ['linear'], ['zoom'],
-		minIconZoom, 0.1,
-		maxIconZoom, 1
+		minIconZoom, [
+	    	    '*',
+	    	    ['/', 1, ['min',
+			      ['max',
+			       ['to-number',
+				['get', _csr, ['at', ['get', _id], ['literal', s]]],
+				(['to-number',
+				  ['get', _cat, ['at', ['get', _id], ['literal', s]]]
+				 ] == 9) ? comPct : colPct
+			       ],
+			       scr_min],
+			      scr_max]
+		    ],
+	    	    minIconZoomScale],
+		maxIconZoom, [
+	    	    '*',
+	    	    ['/', 1, ['min',
+			      ['max',
+			       ['to-number',
+				['get', _csr, ['at', ['get', _id], ['literal', s]]],
+				(['to-number',
+				  ['get', _cat, ['at', ['get', _id], ['literal', s]]]
+				 ] == 9) ? comPct : colPct
+			       ],
+			       scr_min],
+			      scr_max]
+		    ],
+	    	    maxIconZoomScale]
 	    ]
 	}
     });
@@ -154,7 +180,7 @@ map.on('load', function () {
     // COLLEGE TOGGLE BUTTON -----------------------------------------
 
     elToggle.appendChild(createToggle('college', colPct, comPct, scr_min, scr_max));
-    elToggle.appendChild(createToggle('adjustcsr', colPct, comPct, scr_min, scr_max));
+    // elToggle.appendChild(createToggle('adjustcsr', colPct, comPct, scr_min, scr_max));
     
     // CONTROLS ------------------------------------------------------
 

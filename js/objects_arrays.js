@@ -18,7 +18,6 @@ function Icon(feature) {
     this.zip = s[feature.id][_zip] || '-';
 }
 
-
 // -----------------------------------------------------------------------------
 // ARRAYS
 // -----------------------------------------------------------------------------
@@ -43,3 +42,5 @@ while (idx != -1) {
     nonCollegeCats.push(idx);
     idx = cats.indexOf('community', idx + 1);
 }
+
+

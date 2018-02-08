@@ -17,6 +17,8 @@ var scale_comPct = 1 - .90;	// community icons 90th xtile of HS csr
 
 var minIconZoom = 6;
 var maxIconZoom = 22;
+var minIconZoomScale = 10;
+var maxIconZoomScale = 250;
 
 // -----------------------------------------------------------------------------
 // FLYTO ZOOM (0 - 24)

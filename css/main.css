@@ -22,15 +22,30 @@ body {
 [class*='col-'] {
     width: 100%;
     position: absolute;
+    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+
+.col-sidebar-header {
+    position: absolute;
+    left: 0;
+    top: 70%;
+    height: 5%;
 }
 
 .col-sidebar {
     left: 0;
     top: 75%;
-    height: 25%;
-    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    height: 20%;
     background-color: #fff;
     overflow: auto;
+    position: absolute;
+}
+
+.col-sidebar-footer {
+    position: absolute;
+    left: 0;
+    top: 95%;
+    height: 5%;
 }
 
 .side {
@@ -38,16 +53,21 @@ body {
 }
 
 #instructions {
-    position: absolute;
+    /* position: absolute; */
     visibility: visible;
     padding: 1rem;
-    left: 0;
-    top: 3rem;
+    /* left: 0; */
+    /* top: 3rem; */
+}
+
+#footer {
+    background: #fff;
+    padding: 1rem;
 }
 
 .col-map {
     top: 0;
-    height: 75%;
+    height: 70%;
 }
 
 /* iPad: portrait */
@@ -58,13 +78,26 @@ and (orientation: portrait) {
     .col-tablet-map {
 	right:0;
 	top:0;
-	height: 75%;
+	height: 70%;
+    }
+
+    .col-tablet-sidebar-header {
+	left: 0;
+	top: 70%;
+	height: 5%;
     }
     
     .col-tablet-sidebar {
 	left: 0;
 	top: 75%;
-	height: 25%;
+	height: 20%;
+	overflow: auto;
+    }
+
+    .col-tablet-sidebar-footer {
+	left: 0;
+	top: 95%;
+	height: 5%;
     }
 }
 
@@ -81,15 +114,32 @@ and (orientation: landscape) {
 	width: 75%;
 	height: 100%;
     }
+
+    .col-sidebar-header {
+	position: absolute;
+	width: 25%;
+	left: 0;
+	top: 0;
+	height: 5%;
+    }
     
     .col-sidebar {
 	position: absolute;
 	width: 25%;
 	left: 0;
-	top: 0;
-	bottom: 0;
-	height: 100%;
+	top: 5%;
+	height: 90%;
     }
+    
+    .col-sidebar-footer {
+	position: absolute;
+	width: 25%;
+	left: 0;
+	top: 95%;
+	height: 5%;
+	z-index: 1;
+    }
+	
 }
 
 /* desktop/laptop */
@@ -103,14 +153,41 @@ and (min-width: 1024px) {
 	width: 75%;
 	height: 100%;
     }
+
+    .col-sidebar-header {
+	/* position: absolute; */
+	float: left;
+	clear: left;
+	width: 25%;
+	/* left: 0; */
+	/* top: 0; */
+	/* min-height: 50px; */
+	/* height: 5%; */
+	/* z-index: 1; */
+    }
     
     .col-sidebar {
-	position: absolute;
+	/* position: absolute; */
+	float: left;
+	clear: left;
 	width: 25%;
-	left: 0;
-	top: 0;
-	bottom: 0;
-	height: 100%;
+	/* left: 0; */
+	/* top: 5%; */
+	/* height: 90%; */
+	/* z-index: 0; */
+	overflow: auto;
+    }
+    
+    .col-sidebar-footer {
+	/* position: absolute; */
+	float: left;
+	clear: left;
+	width: 25%;
+	/* left: 0; */
+	/* top: 95%; */
+	/* min-height: 20px; */
+	/* height: 5%; */
+	/* z-index: 1; */
     }
 }
 
@@ -160,7 +237,7 @@ and (min-width: 1024px) {
 
 /* Side bar listing */
 
-.col-sidebar fieldset {
+.col-sidebar-header fieldset {
     display: block;
     background-color: #232D4B;
     border: none;
@@ -215,7 +292,6 @@ and (min-width: 1024px) {
 
 .triangle {
     font-size: 1.25rem;
-    /* padding-right: .5rem; */
     vertical-align: middle;
 }
 
