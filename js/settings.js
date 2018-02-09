@@ -17,8 +17,8 @@ var scale_comPct = 1 - .90;	// community icons 90th xtile of HS csr
 
 var minIconZoom = 6;
 var maxIconZoom = 22;
-var minIconZoomScale = 10;
-var maxIconZoomScale = 250;
+var minIconZoomScale = 15;
+var maxIconZoomScale = 150;
 
 // -----------------------------------------------------------------------------
 // FLYTO ZOOM (0 - 24)
@@ -106,13 +106,13 @@ var bullets = {'hs': {'color': getColor(rtorange),
 // ICONS (name, file)
 // -----------------------------------------------------------------------------
 
-var iconlist = [{'name': 'college4', 'file': 'college-4-bg.png'},
-		{'name': 'college2', 'file': 'college-2-bg.png'},
-		{'name': 'schoolna', 'file': 'school-bg.png'},
-		{'name': 'schoolad', 'file': 'school-advising-bg.png'},
-		{'name': 'schoolnanoc', 'file': 'school-noc-bg.png'},
-		{'name': 'schooladnoc', 'file': 'school-advising-noc-bg.png'},
-		{'name': 'community', 'file': 'community-bg.png'},
+var iconlist = [{'name': 'college4', 'file': 'college-4-512.png'},
+		{'name': 'college2', 'file': 'college-2-512.png'},
+		{'name': 'schoolna', 'file': 'school-512.png'},
+		{'name': 'schoolad', 'file': 'school-512.png'}, // fix
+		// {'name': 'schoolnanoc', 'file': 'school-noc-bg.png'},
+		// {'name': 'schooladnoc', 'file': 'school-advising-noc-bg.png'},
+		{'name': 'community', 'file': 'school-512.png'}, // fix
 		{'name': 'transparent', 'file': 'transparent.png'}];
 
 // -----------------------------------------------------------------------------
