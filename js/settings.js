@@ -109,10 +109,10 @@ var bullets = {'hs': {'color': getColor(rtorange),
 var iconlist = [{'name': 'college4', 'file': 'college-4-512.png'},
 		{'name': 'college2', 'file': 'college-2-512.png'},
 		{'name': 'schoolna', 'file': 'school-512.png'},
-		{'name': 'schoolad', 'file': 'school-512.png'}, // fix
+		{'name': 'schoolad', 'file': 'school-adv-512.png'},
 		// {'name': 'schoolnanoc', 'file': 'school-noc-bg.png'},
 		// {'name': 'schooladnoc', 'file': 'school-advising-noc-bg.png'},
-		{'name': 'community', 'file': 'school-512.png'}, // fix
+		{'name': 'community', 'file': 'community-512.png'},
 		{'name': 'transparent', 'file': 'transparent.png'}];
 
 // -----------------------------------------------------------------------------
