@@ -4,19 +4,19 @@ custom_css:
 - main
 custom_js:
 - func_general
+- settings
+- icon_array
+- objects_arrays
 - func_popup
 - func_event
 - func_mapping
-- settings
-- objects_arrays
-- icon_array
 - index_map
 ---
 
 <div class='container'>
-	<div class='col-sidebar col-sidebar-tablet'>
-		<div class='col-header col-header-tablet'>
-			<h2 class='side'>College Advising Resource Map</h2>	
+	<div class='col-sidebar'>
+		<div class='col-header'>
+			<h2>College Advising Resource Map</h2>	
 		</div>
 		<div id='instructions'>
 			<p>Use this interactive map to explore college advising resources
@@ -31,7 +31,7 @@ custom_js:
 			<p><i class='fas fa-mouse-pointer fa-lg fa-fw'></i>
 				<b>Click the toggle button</b> in the upper left to hide / show college icons</p>
 	    </div>
-		<div class='col-list col-list-tablet'>
+		<div class='col-list'>
 		
 			<div>
 			<fieldset>
@@ -41,12 +41,16 @@ custom_js:
 		
 			<div id='feature-listing' class='listing'></div>
 		</div>
-		<div class='col-footer col-footer-tablet'>
-			<a href='{{ site.github }}'><i class='fas fa-code fa-lg
-		ft'></i></a>&nbsp;&nbsp;<i class='fas fa-info fa-lg ft'></i>
+		<div class='col-footer'>
+		<div class='ftspace'></div>
+		<div class='ft'> 
+			<a href='{{ site.baseurl }}/about'>About</a> | 
+			<a href='{{ site.baseurl }}/corrections'>Corrections</a> | 
+			<a href='{{ site.github }}'>Code</a> 
+		</div>
 		</div>
 	</div>
-	<div class='col-map col-map-tablet'>
+	<div class='col-map'>
 		<nav id='toggle'></nav>
 		<div id='map'></div>
 	</div>

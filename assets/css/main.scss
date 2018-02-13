@@ -1,0 +1,331 @@
+---
+---
+
+@import 'variables';
+@import 'bullets';
+@import 'media';
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    bottom: 0;
+}
+
+[class*='col-'] {
+    font-family: $font-stack;
+}
+
+[class*='col-header'], [class*='col-footer'] {
+    @extend %col-shared;
+}
+
+#map {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    bottom: 0;
+}
+
+// -----------------------------------------------------------------------------
+// responsive format
+// -----------------------------------------------------------------------------
+
+.col-map {
+    position: absolute;
+    top: 0;
+    font-size: $font-size-sm;
+    @include landscape {
+	right: 0;
+	bottom: 0;
+	height: 100%;
+	width: 67%;
+	@include medium {
+	    width: 75%;
+	    font-size: $font-size-md;
+	}
+	@include large {
+	    width: 75%;
+	    font-size: $font-size-lg;
+	}
+    }
+    @include portrait {
+	width: 100%;
+	height: 60%;
+	@include medium {
+	    height: 75%;
+	    font-size: $font-size-md;
+	}
+    }
+}
+
+.col-sidebar {
+    position: absolute;
+    left: 0;
+    font-size: $font-size-sm;
+    @include landscape {
+	top: 0;
+	width: 33%;
+	height: 100%;
+	@include medium {
+	    width: 25%;
+	    font-size: $font-size-md;
+	}
+	@include large {
+	    font-size: $font-size-lg;
+	}
+    }
+    @include portrait {
+	top: 60%;
+	width: 100%;
+	height: 40%;
+	@include medium {
+	    top: 70%;
+	    height: 30%;
+	    font-size: $font-size-md;
+	}
+	@include large {
+	    font-size: $font-size-lg;
+	}
+    }
+}
+
+.col-header {
+    height: 5%;
+    min-height: $header-min-px-sm;
+    width: 100%;
+    @include medium {
+	min-height: $header-min-px-md;
+    }
+    @include large {
+	min-height: $header-min-px-lg;
+    }    
+}
+
+.col-footer {
+    position: absolute;
+    bottom: 0;
+    height: 5%;
+    min-height: $footer-min-px-sm;
+    width: 100%;
+    background: $footer-background;
+    color: $footer-color;
+    font-weigth: bold;
+    @include medium {
+	min-height: $footer-min-px-md;
+    }
+    @include large {
+	min-height: $footer-min-px-lg;
+    }
+    a {
+	color: $footer-link;
+	text-decoration: none;
+    }
+    a:hover, a.active:hover {
+	color: $footer-link-hover;
+	text-decoration: underline;
+    }
+}
+
+.ft {
+    text-align: center;
+    height: 60%;
+    min-height: calc(100% - (#{$footer-min-px-sm} / 2));
+    @include medium {
+	min-height: calc(100% - (#{$footer-min-px-md} / 2));
+    }
+    @include large {
+	min-height: calc(100% - (#{$footer-min-px-lg} / 2));
+    } 
+}
+
+.ftspace {
+    height: 40%;
+    min-height: calc(100% - (#{$footer-min-px-sm} / 2) - 1);
+    @include medium {
+	min-height: calc(100% - (#{$footer-min-px-md} / 2) - 1);
+    }
+    @include large {
+	min-height: calc(100% - (#{$footer-min-px-lg} / 2) - 1);
+    } 
+}
+
+.col-list {
+    height: 90%;
+    width: 100%;
+    overflow: auto;
+    max-height: calc(95% - #{$header-min-px-sm} - #{$footer-min-px-sm});     
+    @include medium {
+	max-height: calc(95% - #{$header-min-px-md} - #{$footer-min-px-md});
+    }
+    @include large {
+	max-height: calc(95% - #{$header-min-px-lg} - #{$footer-min-px-lg});
+    }
+}
+
+// -----------------------------------------------------------------------------
+// search input
+// -----------------------------------------------------------------------------
+
+.mapboxgl-ctrl-geocoder {
+    @include landscape {
+	min-width: 12rem;
+	@include medium {
+	    min-width: 15rem;
+	}
+	@include large {
+	    min-width: 20rem;
+	}
+    }
+    @include portrait {
+	min-width: 10rem;
+	@include medium {
+	    min-width: 12rem;
+	}
+	@include large {
+	    min-width: 20rem;
+	}
+    }
+}
+
+// -----------------------------------------------------------------------------
+// instructions
+// -----------------------------------------------------------------------------
+
+#instructions {
+    position: absolute;
+    visibility: visible;
+    padding: 0 1rem;
+    left: 0;
+    height: 90%;
+    overflow: auto;
+    max-height: calc(98% - #{$header-min-px-sm} - #{$footer-min-px-sm});     
+    @include medium {
+	max-height: calc(98% - #{$header-min-px-md} - #{$footer-min-px-md});
+    }
+    @include large {
+	max-height: calc(98% - #{$header-min-px-lg} - #{$footer-min-px-lg});
+    }
+}
+
+// -----------------------------------------------------------------------------
+// toggle button
+// -----------------------------------------------------------------------------
+
+#toggle {
+    background: #fff;
+    position: absolute;
+    z-index: 1;
+    top: 10px;
+    left: 10px;
+    border-radius: 3px;
+    width: 120px;
+    border: 1px solid rgba(0,0,0,0.4);
+    font-family: $font-stack;
+    a {
+	font-size: 13px;
+	color: #404040;
+	display: block;
+	margin: 0;
+	padding: 10px;
+	text-decoration: none;
+	border-bottom: 1px solid rgba(0,0,0,0.25);
+	text-align: center;
+    }
+    a:last-child {
+	border: none;
+    }
+    a:hover {
+	background-color: $rtorange;
+	color: $link-hover;
+    }
+    a.active {
+	background-color: $jeffblue;
+	color: $link-active;
+    }
+    a.active:hover {
+	background: $rtorange;
+    }
+}
+
+// -----------------------------------------------------------------------------
+// sidebar listing
+// -----------------------------------------------------------------------------
+
+.col-list {
+    fieldset {
+	display: block;
+	background-color: $jeffblue;
+	border: none;
+	padding: .5rem;
+	margin: 0;
+    }
+    input {
+	display: block;
+	border: none;
+	width: 100%;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	border-radius: .25rem;
+	padding: 1rem;
+	margin: 0;
+    }
+    .listing {
+	overflow: auto;
+	background-color: $col-background;	
+	> * {
+	    display: block;
+	    padding: 5px 10px;
+	    margin: 0;
+	}
+	a {
+	    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+	    color: $listing-link;
+	    text-decoration: none;
+	}
+	a:hover {
+	    background: $listing-link-hover;
+	}
+    }
+}
+
+#feature-filter {
+    .col-list fieldset {
+	display: none;
+	background-color: $rtorange;
+    }
+}
+
+// -----------------------------------------------------------------------------
+// popup
+// -----------------------------------------------------------------------------
+
+table {
+    width: 100%;
+}
+
+.num {
+    text-align: center;
+}
+
+// -----------------------------------------------------------------------------
+// icons
+// -----------------------------------------------------------------------------
+
+.icon {
+    width: 3%;
+    padding-right: .5rem;
+}
+
+.fas, .far {
+    padding-right: .5rem;
+}
+
+

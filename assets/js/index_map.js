@@ -49,7 +49,7 @@ var data = (function() {
     var data = null;
     $.ajax({
 	'async': false,
-	'url': '{{ site.baseurl }}/data/icons.geojson',
+	'url': '{{ site.data }}/icons.geojson',
 	'dataType': 'json',
 	'success':  function(data) {
 	    json = data;
@@ -85,7 +85,7 @@ map.on('load', function () {
 
     for (i=0;i<iconlist.length;i++) {
 	(function(j) {	// NB: wrap in new function b/c .loadImage is async
-    	    var file = '{{ site.baseurl }}{{ site.images }}/' + iconlist[j].file;
+    	    var file = '{{ site.images }}/' + iconlist[j].file;
     	    var name = iconlist[j].name;
     	    map.loadImage(file, function(error, link) {
     		if (error) throw error;
