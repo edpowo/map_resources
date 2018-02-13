@@ -38,7 +38,7 @@ elFilter.parentNode.style.display = 'none';
 var swFilter = false;
 var swNoFilterMatch = false;
 var swToggleCollege = false;
-var swToggleHS = false;
+var swToggleHS = true;		// default: scale size by csr
 
 // DATA ------------------------------------------------------------------------
 
@@ -46,7 +46,7 @@ var data = (function() {
     var data = null;
     $.ajax({
 	'async': false,
-	'url': '/map_resources/data/icons.geojson',
+	'url': '/map_resources/assets/data/icons.geojson',
 	'dataType': 'json',
 	'success':  function(data) {
 	    json = data;
@@ -82,7 +82,7 @@ map.on('load', function () {
 
     for (i=0;i<iconlist.length;i++) {
 	(function(j) {	// NB: wrap in new function b/c .loadImage is async
-    	    var file = '/map_resources/images/' + iconlist[j].file;
+    	    var file = '/map_resources/assets/images/' + iconlist[j].file;
     	    var name = iconlist[j].name;
     	    map.loadImage(file, function(error, link) {
     		if (error) throw error;
@@ -116,8 +116,34 @@ map.on('load', function () {
 	    'icon-keep-upright': true,
 	    'icon-size': [
 		'interpolate', ['linear'], ['zoom'],
-		minIconZoom, 0.1,
-		maxIconZoom, 1
+		minIconZoom, [
+	    	    '*',
+	    	    ['/', 1, ['min',
+			      ['max',
+			       ['to-number',
+				['get', _csr, ['at', ['get', _id], ['literal', s]]],
+				(['to-number',
+				  ['get', _cat, ['at', ['get', _id], ['literal', s]]]
+				 ] == 9) ? comPct : colPct
+			       ],
+			       scr_min],
+			      scr_max]
+		    ],
+	    	    minIconZoomScale],
+		maxIconZoom, [
+	    	    '*',
+	    	    ['/', 1, ['min',
+			      ['max',
+			       ['to-number',
+				['get', _csr, ['at', ['get', _id], ['literal', s]]],
+				(['to-number',
+				  ['get', _cat, ['at', ['get', _id], ['literal', s]]]
+				 ] == 9) ? comPct : colPct
+			       ],
+			       scr_min],
+			      scr_max]
+		    ],
+	    	    maxIconZoomScale]
 	    ]
 	}
     });
@@ -151,7 +177,7 @@ map.on('load', function () {
     // COLLEGE TOGGLE BUTTON -----------------------------------------
 
     elToggle.appendChild(createToggle('college', colPct, comPct, scr_min, scr_max));
-    elToggle.appendChild(createToggle('adjustcsr', colPct, comPct, scr_min, scr_max));
+    // elToggle.appendChild(createToggle('adjustcsr', colPct, comPct, scr_min, scr_max));
     
     // CONTROLS ------------------------------------------------------
 
