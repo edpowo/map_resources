@@ -82,15 +82,17 @@ body {
 	}
     }
     @include portrait {
-	top: 60%;
 	width: 100%;
+	top: 60%;
 	height: 40%;
 	@include medium {
-	    top: 70%;
-	    height: 30%;
+	    top: 75%;
+	    height: 25%;
 	    font-size: $font-size-md;
 	}
 	@include large {
+	    top: 75%;
+	    height: 25%;
 	    font-size: $font-size-lg;
 	}
     }
