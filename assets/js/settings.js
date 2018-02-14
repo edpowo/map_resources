@@ -18,13 +18,15 @@ var scale_comPct = 1 - .90;	// community icons 90th xtile of HS csr
 var minIconZoom = 6;
 var maxIconZoom = 22;
 var minIconZoomScale = 15;
-var maxIconZoomScale = 150;
+var maxIconZoomScale = 140;
+var smallScreenMinAdj = 1;
+var smallScreenMaxAdj = .3;
 
 // -----------------------------------------------------------------------------
 // FLYTO ZOOM (0 - 24)
 // -----------------------------------------------------------------------------
 
-var flyToZoom = 12;
+var flyToZoom = 11;
 
 // -----------------------------------------------------------------------------
 // SCALE CONTROL WIDTH (px)

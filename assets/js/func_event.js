@@ -7,9 +7,11 @@
 
 // fly to point when clicking sidebar
 function eventFlyTo(feature, popup) {
-    popup.remove();		
+    popup.remove();
+    var lon = feature.geometry.coordinates[0];
+    var lat = feature.geometry.coordinates[1] + .012; // lower than center
     map.flyTo({
-	center: feature.geometry.coordinates,
+	center: [lon, lat],
 	zoom: flyToZoom
     });
     popup.create(feature);
