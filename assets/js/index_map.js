@@ -21,7 +21,8 @@ var map = new mapboxgl.Map({
 
 // init popup 
 var popup = new mapboxgl.Popup({
-    closeButton: false
+    closeButton: false,
+    anchor: 'bottom'
 });
 
 // init structure to hold visible points

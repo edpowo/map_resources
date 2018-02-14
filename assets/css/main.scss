@@ -34,8 +34,24 @@ body {
 }
 
 // -----------------------------------------------------------------------------
-// responsive format
+// responsive format (set map and let listing column respond)
 // -----------------------------------------------------------------------------
+
+// landscape
+$map-height-landscape: 100%;
+$map-width-landscape-sm: 67%;
+$map-width-landscape-md: 70%;
+$map-width-landscape-lg: 75%;
+
+// portrait
+$map-width-portrait: 100%;
+$map-height-portrait-sm: 60%;
+$map-height-portrait-md: 67%;
+$map-height-portrait-lg: 70%;
+
+// ...these are the same; new var for clarity
+$col-height-landscape: $map-height-landscape;
+$col-width-portrait: $map-width-portrait;
 
 .col-map {
     position: absolute;
@@ -44,22 +60,26 @@ body {
     @include landscape {
 	right: 0;
 	bottom: 0;
-	height: 100%;
-	width: 67%;
+	height: $map-height-landscape;
+	width: $map-width-landscape-sm;
 	@include medium {
-	    width: 75%;
+	    width: $map-width-landscape-md;
 	    font-size: $font-size-md;
 	}
 	@include large {
-	    width: 75%;
+	    width: $map-width-landscape-lg;
 	    font-size: $font-size-lg;
 	}
     }
     @include portrait {
-	width: 100%;
-	height: 60%;
+	width: $map-width-portrait;
+	height: $map-height-portrait-sm;
 	@include medium {
-	    height: 75%;
+	    height: $map-height-portrait-md;
+	    font-size: $font-size-md;
+	}
+	@include large {
+	    height: $map-height-portrait-lg;
 	    font-size: $font-size-md;
 	}
     }
@@ -71,28 +91,29 @@ body {
     font-size: $font-size-sm;
     @include landscape {
 	top: 0;
-	width: 33%;
-	height: 100%;
+	height: $col-height-landscape;
+	width: calc(100% - #{$map-width-landscape-sm});	
 	@include medium {
-	    width: 25%;
+	    width: calc(100% - #{$map-width-landscape-md});
 	    font-size: $font-size-md;
 	}
 	@include large {
+	    width: calc(100% - #{$map-width-landscape-lg});
 	    font-size: $font-size-lg;
 	}
     }
     @include portrait {
-	width: 100%;
-	top: 60%;
-	height: 40%;
+	width: $col-width-portrait;
+	top: $map-height-portrait-sm;
+	height: calc(100% - #{$map-height-portrait-sm});
 	@include medium {
-	    top: 75%;
-	    height: 25%;
+	    top: $map-height-portrait-md;
+	    height: calc(100% - #{$map-height-portrait-md});
 	    font-size: $font-size-md;
 	}
 	@include large {
-	    top: 75%;
-	    height: 25%;
+	    top: $map-height-portrait-lg;
+	    height: calc(100% - #{$map-height-portrait-lg});
 	    font-size: $font-size-lg;
 	}
     }
@@ -232,7 +253,7 @@ body {
 // -----------------------------------------------------------------------------
 
 #toggle {
-    background: #fff;
+    background: $white;
     position: absolute;
     z-index: 1;
     top: 10px;
@@ -333,6 +354,13 @@ table {
     -webkit-filter: drop-shadow(5px 5px 10px rgba(0,0,0,0.8));
     filter: drop-shadow(5px 5px 10px rgba(0,0,0,0.8));
     background: $popup-background;
+    transform: scale(0.7);
+    @include medium {
+	transform: scale(.9);
+    }
+    @include large {
+	transform: scale(1);
+    }
     h2 {
 	color: $popup-header-color;
 	text-align: center;
@@ -354,6 +382,20 @@ table {
 	border-top-left-radius: 10px;
 	border-top-right-radius: 10px;
 	background: $popup-header-background;
+    }
+}
+
+// kludge b/c tooltip point isn't connected directly to scaled content...buh
+.mapboxgl-popup-tip {
+    margin-bottom: 1rem;
+    margin-top: -1.3rem;
+    @include medium {
+	margin-bottom: 3rem;
+	margin-top: -.5rem;
+    }
+    @include large {
+	margin-bottom: 4rem;
+	margin-top: 0;
     }
 }
 
