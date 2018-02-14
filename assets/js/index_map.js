@@ -55,6 +55,16 @@ var data = (function() {
     return json;
 })();
 
+// RESCALE ICONS IF SMALL MOBILE -----------------------------------------------
+
+$( document ).ready(function() {      
+    var smallMobile = window.matchMedia('(max-width: 600px)');
+    if (smallMobile.matches) {
+        minIconZoomScale = Math.floor(minIconZoomScale * smallScreenMinAdj);
+	maxIconZoomScale = Math.floor(maxIconZoomScale * smallScreenMaxAdj);
+    }
+ });
+
 // LOAD MAP --------------------------------------------------------------------
 map.on('load', function () {
 

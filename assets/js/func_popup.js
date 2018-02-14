@@ -20,7 +20,7 @@ mapboxgl.Popup.prototype.text = function(feature) {
     isCM = (lab === 'community');
 
     if (isHS) {
-	htmlstr = "<h2>" + icon.name + "</h2>";
+	htmlstr = "<div class='pu-header'><h2>" + icon.name + "</h2></div>";
 	htmlstr += "<table>";
 	htmlstr += "<tr><td>School enrollment</td>"
 	    + "<td class = 'num'>" + icon.enroll + "</td></tr>";
@@ -35,19 +35,20 @@ mapboxgl.Popup.prototype.text = function(feature) {
 	    + "<td class = 'num'>" + csr + "</td></tr>";
 	htmlstr += "</table>";
 	if (icon.advorgs !== '-') {
-	    htmlstr += "<h2>Advising organizations</h2>";
+	    htmlstr += "<h3>Advising organizations</h3>";
 	    for (i = 0; i < icon.advorgs.length; i++) {
 		htmlstr += icon.advorgs[i] + "</br>";
 	    }
 	}
     } else if (isCM) {
-	htmlstr = "<h2> Zip code: " + icon.zip + "</h2>";
-	htmlstr += "<h2>Advising organizations</h2>";
+	htmlstr = "<div class='pu-header'><h2> Zip code: "
+	    + icon.zip + "</h2></div>";
+	htmlstr += "<h3>Advising organizations</h3>";
 	    for (i = 0; i < icon.advorgs.length; i++) {
 		htmlstr += icon.advorgs[i] + "</br>";
 	    }
     } else {
-	htmlstr = "<h2>" + icon.name + "</h2>";
+	htmlstr = "<div class='pu-header'><h2>" + icon.name + "</h2></div>";
 	htmlstr += "<b>Sector: </b>" + sector[icon.cat];
     }
     return htmlstr;

@@ -94,10 +94,20 @@ body {
     .col-sidebar {
       font-size: 14px; } }
 
+  .col-sidebar h2 {
+    margin: 0;
+    padding: 0; }
+
 .col-header {
   height: 5%;
   min-height: 36px;
-  width: 100%; }
+  width: 100%;
+  background: #232d4b;
+  border-bottom: 5px solid #e57200;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
   @media (min-width: 680px) {
     .col-header {
       min-height: 50px; } }
@@ -113,7 +123,8 @@ body {
   width: 100%;
   background: #232d4b;
   color: white;
-  font-weigth: bold; }
+  font-weight: bold;
+  border-top: 5px solid #e57200; }
   @media (min-width: 680px) {
     .col-footer {
       min-height: 30px; } }
@@ -152,13 +163,13 @@ body {
   height: 90%;
   width: 100%;
   overflow: auto;
-  max-height: calc(95% - 36px - 24px); }
+  max-height: calc(98% - 36px - 24px); }
   @media (min-width: 680px) {
     .col-list {
-      max-height: calc(95% - 50px - 30px); } }
+      max-height: calc(98% - 50px - 30px); } }
   @media (min-width: 1200px) {
     .col-list {
-      max-height: calc(95% - 50px - 50px); } }
+      max-height: calc(98% - 50px - 50px); } }
 
 @media screen and (orientation: landscape) {
   .mapboxgl-ctrl-geocoder {
@@ -264,6 +275,31 @@ table {
 
 .num {
   text-align: center; }
+
+.mapboxgl-popup-content {
+  border-radius: 10px;
+  -webkit-filter: drop-shadow(5px 5px 10px rgba(0, 0, 0, 0.8));
+  filter: drop-shadow(5px 5px 10px rgba(0, 0, 0, 0.8));
+  background: white; }
+  .mapboxgl-popup-content h2 {
+    color: white;
+    text-align: center;
+    margin-top: .5rem;
+    margin-bottom: .5rem; }
+  .mapboxgl-popup-content h3 {
+    color: auto;
+    text-align: center;
+    margin-top: .2rem;
+    margin-bottom: .2rem; }
+  .mapboxgl-popup-content .pu-header {
+    position: relative;
+    width: 100%;
+    left: -10px;
+    top: -10px;
+    padding: 1px 10px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    background: #232d4b; }
 
 .icon {
   width: 3%;
