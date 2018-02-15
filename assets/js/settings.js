@@ -17,7 +17,7 @@ var maxIconZoom = 22;
 var minIconZoomScale = 15;
 var maxIconZoomScale = 140;
 var smallScreenMinAdj = 1;
-var smallScreenMaxAdj = .3;
+var smallScreenMaxAdj = .25;
 
 // -----------------------------------------------------------------------------
 // FLYTO ZOOM (0 - 24)

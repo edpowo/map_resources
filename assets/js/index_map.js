@@ -1,3 +1,13 @@
+// RESCALE IF SMALL MOBILE -----------------------------------------------------
+
+$( document ).ready(function() {      
+    var smallMobile = window.matchMedia('(max-width: 600px)');
+    if (smallMobile.matches) {
+        minIconZoomScale = Math.floor(minIconZoomScale * smallScreenMinAdj);
+	maxIconZoomScale = Math.floor(maxIconZoomScale * smallScreenMaxAdj);
+    }
+});
+
 // INITS -----------------------------------------------------------------------
 
 // public token
@@ -13,7 +23,7 @@ var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/light-v9?optimize=true',
     center: [-96, 37.8],
-    zoom: 4
+    zoom: 2
 }).fitBounds(bbox);
 
 // init popup 
@@ -55,16 +65,6 @@ var data = (function() {
     });
     return json;
 })();
-
-// RESCALE ICONS IF SMALL MOBILE -----------------------------------------------
-
-$( document ).ready(function() {      
-    var smallMobile = window.matchMedia('(max-width: 600px)');
-    if (smallMobile.matches) {
-        minIconZoomScale = Math.floor(minIconZoomScale * smallScreenMinAdj);
-	maxIconZoomScale = Math.floor(maxIconZoomScale * smallScreenMaxAdj);
-    }
- });
 
 // LOAD MAP --------------------------------------------------------------------
 map.on('load', function () {
