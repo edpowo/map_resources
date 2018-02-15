@@ -333,3 +333,22 @@ table {
 
 .fas, .far {
   padding-right: .5rem; }
+
+main {
+  width: 80%;
+  margin: 0 auto 3rem;
+  padding: 0 2rem; }
+  @media only screen and (min-width: 680px) and (max-width: 1200px) {
+    main {
+      width: 70%; } }
+  @media only screen and (min-width: 1200px) {
+    main {
+      width: 50%; } }
+  main .line {
+    margin: 2rem 0;
+    height: 1px;
+    background: black;
+    background: -webkit-gradient(linear, 0 0, 100% 0, from(white), to(white), color-stop(50%, black)); }
+
+.page-header > h1 {
+  text-align: center; }
