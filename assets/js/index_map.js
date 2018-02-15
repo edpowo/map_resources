@@ -11,6 +11,19 @@ $( document ).ready(function() {
 	    minIconZoomScale = Math.floor(minIconZoomScale * smallTabletMinAdj);
 	    maxIconZoomScale = Math.floor(maxIconZoomScale * smallTabletMaxAdj);
 	}
+	// append instruction to add to home screen on mobile if not already
+	var html = "<p><i class='fas fa-plus-square fa-lg fa-fw'></i>";
+	html += '<b>Add to home screen</b> on mobile device for full screen ';
+	html += 'and better user experience.</p>';
+
+	// two versions
+	if ("standalone" in window.navigator) {
+	    if(!window.navigator.standalone) {
+		$('#instructions').append(html);
+	    } else if (window.matchMedia('(display-mode: standalone)').matches) {
+		$('#instructions').append(html);
+	    }
+	}
     }
 });
 
