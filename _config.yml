@@ -18,3 +18,8 @@ permalink:      pretty
 
 # map options
 mapstyle:	light-v9
+
+# web app icon
+icon:
+  shortname:    'Advising'
+  longname:     'College Advising Resources Interactive Map'
