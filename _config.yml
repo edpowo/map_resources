@@ -4,7 +4,7 @@ site:		https://edpowo.github.io
 baseurl: 	'/map_resources'
 
 # mapboxgl-js version
-mbgl_ver:       '0.44.1'
+mbgl_ver:       '0.42.2'
 
 # assets
 images:         '/map_resources/assets/images'
