@@ -6,13 +6,14 @@
 $( document ).ready(function() {      
     var smallMobile = window.matchMedia('(max-width: 600px)');
     var smallTablet = window.matchMedia('(max-width: 1024px)');
-    if (smallMobile.matches) {
-        minIconZoomScale = Math.floor(minIconZoomScale * smallMobileMinAdj);
-	maxIconZoomScale = Math.floor(maxIconZoomScale * smallMobileMaxAdj);
-    }
     if (smallTablet.matches) {
-        minIconZoomScale = Math.floor(minIconZoomScale * smallTabletMinAdj);
-	maxIconZoomScale = Math.floor(maxIconZoomScale * smallTabletMaxAdj);
+	if (smallMobile.matches) {
+            minIconZoomScale = Math.floor(minIconZoomScale * smallMobileMinAdj);
+	    maxIconZoomScale = Math.floor(maxIconZoomScale * smallMobileMaxAdj);
+	} else {
+	    minIconZoomScale = Math.floor(minIconZoomScale * smallTabletMinAdj);
+	    maxIconZoomScale = Math.floor(maxIconZoomScale * smallTabletMaxAdj);
+	}
     }
 });
 
