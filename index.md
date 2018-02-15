@@ -29,7 +29,7 @@ custom_js:
 			<p><i class='far fa-hand-pointer fa-lg fa-fw'></i>
 				<b>Drag, click, and zoom</b> to manually explore.</p>
 			<p><i class='fas fa-mouse-pointer fa-lg fa-fw'></i>
-				<b>Click the toggle button</b> in the upper left to hide / show college icons</p>
+				<b>Click the toggle button</b> in the upper left to hide / show college icons</p>		
 	    </div>
 		<div class='col-list'>
 		
