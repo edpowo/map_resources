@@ -412,4 +412,38 @@ table {
     padding-right: .5rem;
 }
 
+// -----------------------------------------------------------------------------
+// page
+// -----------------------------------------------------------------------------
+
+$main-width-sm: 80%;
+$main-width-md: 70%;
+$main-width-lg: 50%;
+
+main {
+    width: $main-width-sm;
+    margin: 0 auto 3rem;
+    padding: 0 2rem;
+    @include medium {
+	width: $main-width-md;
+    }
+    @include large {
+	width: $main-width-lg;
+    }
+
+    .line { 
+	margin: 2rem 0;
+	height: 1px;
+	background: black;
+	background: -webkit-gradient(linear, 0 0, 100% 0, from(white),
+				     to(white), color-stop(50%, black));
+}
+}
+
+.page-header {
+    > h1 {
+	text-align: center;
+    }
+}
+
 

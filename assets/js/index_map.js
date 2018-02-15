@@ -184,7 +184,7 @@ map.on('load', function () {
     // SIDEBAR -------------------------------------------------------
 
     // add to visible variable on these events, which triggers sidebar
-    map.on('zoomend', addToVisible);
+    map.on('zoom', addToVisible);
     map.on('move', addToVisible);
 
     // POPUPS --------------------------------------------------------
