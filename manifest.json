@@ -1,0 +1,31 @@
+---
+---
+
+{
+    "short_name": "{{ site.icon.shortname }}",
+    "name": "{{ site.icon.longname }}",
+    "icons": [
+	{
+	    "src": "{{ site.images }}/launch-icon-120.png",
+	    "sizes": "120x120",
+	    "type": "image/png"
+	},
+	{
+	    "src": "{{ site.images }}/launch-icon-152.png",
+	    "sizes": "152x152",
+	    "type": "image/png"
+	},
+	{
+	    "src": "{{ site.images }}/launch-icon-167.png",
+	    "sizes": "167x167",
+	    "type": "image/png"
+	},
+	{
+	    "src": "{{ site.images }}/launch-icon-1024.png",
+	    "sizes": "1024x1024",
+	    "type": "image/png"
+	}
+    ],
+    "start_url": "/index.html",
+    "display": "standalone"
+}

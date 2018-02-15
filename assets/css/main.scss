@@ -39,8 +39,8 @@ body {
 
 // landscape
 $map-height-landscape: 100%;
-$map-width-landscape-sm: 67%;
-$map-width-landscape-md: 70%;
+$map-width-landscape-sm: 74%;
+$map-width-landscape-md: 71%;
 $map-width-landscape-lg: 75%;
 
 // portrait
@@ -58,7 +58,7 @@ $col-width-portrait: $map-width-portrait;
     top: 0;
     font-size: $font-size-sm;
     @include landscape {
-	right: 0;
+        right: 0;
 	bottom: 0;
 	height: $map-height-landscape;
 	width: $map-width-landscape-sm;
@@ -80,7 +80,7 @@ $col-width-portrait: $map-width-portrait;
 	}
 	@include large {
 	    height: $map-height-portrait-lg;
-	    font-size: $font-size-md;
+	    font-size: $font-size-lg;
 	}
     }
 }
