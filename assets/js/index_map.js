@@ -2,9 +2,14 @@
 
 $( document ).ready(function() {      
     var smallMobile = window.matchMedia('(max-width: 600px)');
+    var smallTablet = window.matchMedia('(max-width: 1024px)');
     if (smallMobile.matches) {
-        minIconZoomScale = Math.floor(minIconZoomScale * smallScreenMinAdj);
-	maxIconZoomScale = Math.floor(maxIconZoomScale * smallScreenMaxAdj);
+        minIconZoomScale = Math.floor(minIconZoomScale * smallMobileMinAdj);
+	maxIconZoomScale = Math.floor(maxIconZoomScale * smallMobileMaxAdj);
+    }
+    if (smallTablet.matches) {
+        minIconZoomScale = Math.floor(minIconZoomScale * smallTabletMinAdj);
+	maxIconZoomScale = Math.floor(maxIconZoomScale * smallTabletMaxAdj);
     }
 });
 

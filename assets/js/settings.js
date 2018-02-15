@@ -16,8 +16,10 @@ var minIconZoom = 6;
 var maxIconZoom = 22;
 var minIconZoomScale = 15;
 var maxIconZoomScale = 140;
-var smallScreenMinAdj = 1;
-var smallScreenMaxAdj = .25;
+var smallMobileMinAdj = 1;
+var smallMobileMaxAdj = .25;
+var smallTabletMinAdj = 1;
+var smallTabletMaxAdj = .4;
 
 // -----------------------------------------------------------------------------
 // FLYTO ZOOM (0 - 24)
