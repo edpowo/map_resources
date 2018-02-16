@@ -100,14 +100,17 @@ function addToVisible() {
     // reset if bad input in filter
     if (swNoFilterMatch) {
 	swNoFilterMatch = swFilter = false;
-	map.setFilter('icons', ['has', '$id']);
+	map.setFilter(['icons', 'colleges'], ['has', '$id']);
     }
-    var filter = (swToggleCollege ? iconFilterColleges() : false);
+    // var filter = (swToggleCollege ? iconFilterColleges() : false);
+    var layers = (swToggleCollege ? ['icons'] : ['icons','colleges']);
     // get rendered features 
-    var features = map.queryRenderedFeatures({
-	layers :['icons'],
-	filter : filter
-    });   
+    // var features = map.queryRenderedFeatures({
+    // 	layers :['icons'],
+    // 	filter : filter
+    // });
+    var features = map.queryRenderedFeatures({ layers:layers });
+    
     if (features) {
 	// limit to unique features
         var uniqueFeatures = getUniqueFeaturesByID(features, 'id');

@@ -45,6 +45,10 @@ function opacityToggle(toggle, output) {
     return (toggle ? 'transparent' : output);
 }
 
+function opacityToggle_(toggle) {
+    return (toggle ? 0 : 1);
+}
+
 // function to return percentile value
 function findPercentile(array, p) {
     array.sort(function(a,b) {return a-b});

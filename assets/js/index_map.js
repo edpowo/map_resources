@@ -139,11 +139,11 @@ map.on('load', function () {
 			   2, 'schoolna',
 			   3, 'schooladnoc',
 			   4, 'schoolnanoc',
-			   5, 'college4',
-			   6, 'college4',
-			   7, 'college2',
-			   8, 'college2',
-			   9, 'community',
+			   // 5, 'college4',
+			   // 6, 'college4',
+			   // 7, 'college2',
+			   // 8, 'college2',
+			   // 9, 'community',
 			   'transparent'],
 	    'icon-allow-overlap': true,
 	    'icon-keep-upright': true,
@@ -155,9 +155,9 @@ map.on('load', function () {
 			      ['max',
 			       ['to-number',
 				['get', _csr, ['at', ['get', _id], ['literal', s]]],
-				(['to-number',
-				  ['get', _cat, ['at', ['get', _id], ['literal', s]]]
-				 ] == 9) ? comPct : colPct
+				// (['to-number',
+				//   ['get', _cat, ['at', ['get', _id], ['literal', s]]]
+				//  ] == 9) ? comPct : colPct
 			       ],
 			       scr_min],
 			      scr_max]
@@ -169,16 +169,56 @@ map.on('load', function () {
 			      ['max',
 			       ['to-number',
 				['get', _csr, ['at', ['get', _id], ['literal', s]]],
-				(['to-number',
-				  ['get', _cat, ['at', ['get', _id], ['literal', s]]]
-				 ] == 9) ? comPct : colPct
+				// (['to-number',
+				//   ['get', _cat, ['at', ['get', _id], ['literal', s]]]
+				//  ] == 9) ? comPct : colPct
 			       ],
 			       scr_min],
 			      scr_max]
 		    ],
 	    	    maxIconZoomScale]
 	    ]
-	}
+	},
+    });
+
+    map.addLayer({
+	'id': 'colleges',
+	'type': 'symbol',
+	'source': 'icons',
+	'minzoom': minIconZoom,
+	'layout': {
+	    'visibility': 'visible',
+	    'icon-image': ['match',
+			   ['get', _cat, ['at', ['get', _id], ['literal', s]]],
+			   5, 'college4',
+			   6, 'college4',
+			   7, 'college2',
+			   8, 'college2',
+			   'transparent'],
+	    'icon-allow-overlap': true,
+	    'icon-keep-upright': true,
+	    'icon-size': [
+		'interpolate', ['linear'], ['zoom'],
+		minIconZoom, [
+	    	    '*',
+	    	    ['/', 1, ['min',
+			      ['max',
+			       ['to-number', colPct],
+			       scr_min],
+			      scr_max]
+		    ],
+	    	    minIconZoomScale],
+		maxIconZoom, [
+	    	    '*',
+	    	    ['/', 1, ['min',
+			      ['max',
+			       ['to-number', colPct],
+			       scr_min],
+			      scr_max]
+		    ],
+	    	    maxIconZoomScale]
+	    ]
+	},
     });
     
     // SIDEBAR -------------------------------------------------------
@@ -190,13 +230,18 @@ map.on('load', function () {
     // POPUPS --------------------------------------------------------
 
     map.on('mousemove', 'icons', function(e) {
-	if (!(swToggleCollege && getCatLabel(s[e.features[0].id][_cat]) === 'college')) {
+	map.getCanvas().style.cursor = 'pointer';
+	popup.create(e.features[0]);
+    });
+
+    map.on('mousemove', 'colleges', function(e) {
+	if (!swToggleCollege) {
 	    map.getCanvas().style.cursor = 'pointer';
 	    popup.create(e.features[0]);
 	}
     });
 
-    map.on('mouseleave', 'icons', function() {
+    map.on('mouseleave', ['icons', 'colleges'], function() {
         map.getCanvas().style.cursor = '';
         popup.remove();
     });

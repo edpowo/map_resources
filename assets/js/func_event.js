@@ -63,22 +63,36 @@ function setHSMarker(swToggleHS, colPct, comPct, scr_min, scr_max) {
 }
 
 // function to change marker color for colleges
+// function setCollegeMarker(swToggleCollege) {
+//     map.setLayoutProperty('icons',
+// 			  'icon-image',
+// 			  ['match',
+// 			   ['get', _cat, ['at', ['get', _id], ['literal', s]]],
+// 			   1, 'schoolad',
+// 			   2, 'schoolna',
+// 			   3, 'schooladnoc',
+// 			   4, 'schoolnanoc',
+// 			   5, opacityToggle(swToggleCollege, 'college4'),
+// 			   6, opacityToggle(swToggleCollege, 'college4'),
+// 			   7, opacityToggle(swToggleCollege, 'college2'),
+// 			   8, opacityToggle(swToggleCollege, 'college2'),
+// 			   9, 'community',
+// 			   'transparent']
+// 			 );
+// }
+
 function setCollegeMarker(swToggleCollege) {
-    map.setLayoutProperty('icons',
-			  'icon-image',
-			  ['match',
-			   ['get', _cat, ['at', ['get', _id], ['literal', s]]],
-			   1, 'schoolad',
-			   2, 'schoolna',
-			   3, 'schooladnoc',
-			   4, 'schoolnanoc',
-			   5, opacityToggle(swToggleCollege, 'college4'),
-			   6, opacityToggle(swToggleCollege, 'college4'),
-			   7, opacityToggle(swToggleCollege, 'college2'),
-			   8, opacityToggle(swToggleCollege, 'college2'),
-			   9, 'community',
-			   'transparent']
-			 );
+    map.setPaintProperty('colleges',
+			 'icon-opacity',
+			 (swToggleCollege ? 0 : 1)
+			 // ['match',
+			 //  ['get', _cat, ['at', ['get', _id], ['literal', s]]],
+			 //  5, opacityToggle_(swToggleCollege),
+			 //  6, opacityToggle_(swToggleCollege),
+			 //  7, opacityToggle_(swToggleCollege),
+			 //  8, opacityToggle_(swToggleCollege)
+			 // ]
+			);
 }
 
 // toggle for colleges
