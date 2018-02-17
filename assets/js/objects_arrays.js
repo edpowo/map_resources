@@ -3,16 +3,16 @@
 // -----------------------------------------------------------------------------
 
 function Icon(feature) {
-    this.cat = s[feature.id][_cat] || '-';
-    this.name = s[feature.id][_name] || '-';
-    this.fips = s[feature.id][_fips] || '-';
-    this.enroll = s[feature.id][_enrl] || '-';
-    this.frpl = s[feature.id][_frpl] || '-';
-    this.csr = s[feature.id][_csr] || '-';
-    var advorgs = s[feature.id][_advo];
+    this.cat = s[feature.properties[_id]][_cat] || '-';
+    this.name = s[feature.properties[_id]][_name] || '-';
+    this.fips = s[feature.properties[_id]][_fips] || '-';
+    this.enroll = s[feature.properties[_id]][_enrl] || '-';
+    this.frpl = s[feature.properties[_id]][_frpl] || '-';
+    this.csr = s[feature.properties[_id]][_csr] || '-';
+    var advorgs = s[feature.properties[_id]][_advo];
     this.advorgs = (advorgs != undefined ? advorgs.split('|') : '-');
-    this.csr_flag = s[feature.id][_csrf] || '-';
-    this.zip = s[feature.id][_zip] || '-';
+    this.csr_flag = s[feature.properties[_id]][_csrf] || '-';
+    this.zip = s[feature.properties[_id]][_zip] || '-';
 }
 
 // -----------------------------------------------------------------------------
