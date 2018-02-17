@@ -243,6 +243,7 @@ map.on('load', function () {
 
     // POPUPS --------------------------------------------------------
 
+    // schools and community
     map.on('mousemove', 'schools', function(e) {
     	map.getCanvas().style.cursor = 'pointer';
     	popup.create(e.features[0]);
@@ -253,16 +254,18 @@ map.on('load', function () {
         popup.remove();
     });
 
-    if (!swToggleCollege) {
-	map.on('mousemove', 'colleges', function(e) {
+    // colleges
+    map.on('mousemove', 'colleges', function(e) {
+	if (!swToggleCollege) {
 	    map.getCanvas().style.cursor = 'pointer';
     	    popup.create(e.features[0]);
-	});
-	map.on('mouseleave', 'colleges', function() {
-    	    map.getCanvas().style.cursor = '';
-    	    popup.remove();
-	});
-    }
+	}
+    });
+    map.on('mouseleave', 'colleges', function() {
+    	map.getCanvas().style.cursor = '';
+    	popup.remove();
+    });
+
 
     // INPUT BOX -----------------------------------------------------
 
