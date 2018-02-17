@@ -34,12 +34,6 @@ function filterIcons(iconarray, droptype) {
     return outArray;
 }
 
-// filter to high schools (needed to flatten arrays)
-function iconFilterColleges() {
-    var filterArray = [['in', _id], filterIcons(s, 'college')];
-    return [].concat.apply([], filterArray);
-}
-
 // function to switch between transparent and valued icon
 function opacityToggle(toggle, output) {
     return (toggle ? 'transparent' : output);

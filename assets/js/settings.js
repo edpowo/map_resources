@@ -8,8 +8,9 @@
 var scale_hs_min = 1 - .90;	// values > 90th xtile clipped down
 var scale_hs_max = 1 - .10;	// values < 10th xtile scaled up
 
-var scale_colPct = 1 - .75;	// college icons 70th xtile of HS csr
+var scale_colPct = 1 - .75;	// college icons 75th xtile of HS csr
 var scale_comPct = 1 - .90;	// community icons 90th xtile of HS csr
+scale_colPct += .3;		// ...b/c not on same interpolated scale
 
 // -----------------------------------------------------------------------------
 // MIN / MAX ZOOM FOR ICONS VISIBILITY / SCALING (0 - 24) 
