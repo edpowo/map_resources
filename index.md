@@ -5,7 +5,7 @@ custom_css:
 custom_js:
 - func_general
 - settings
-- icon_array
+- all_icon_array
 - objects_arrays
 - func_popup
 - func_event

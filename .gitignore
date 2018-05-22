@@ -2,6 +2,9 @@
 _*
 !_layouts/
 !_includes/
+!_sass/
+!_scripts/
 !_config.yml
+# !_config_dev.yml
 *.DS_Store
 *.Rhistory 

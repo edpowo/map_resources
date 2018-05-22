@@ -75,11 +75,24 @@ var swToggleHS = true;		// default: scale size by csr
 
 // DATA ------------------------------------------------------------------------
 
-var data = (function() {
+var data_icon = (function() {
     var data = null;
     $.ajax({
 	'async': false,
-	'url': '{{ site.data }}/icons.geojson',
+	'url': '{{ site.data }}/icon_comp.geojson',
+	'dataType': 'json',
+	'success':  function(data) {
+	    json = data;
+	}
+    });
+    return json;
+})();
+
+var data_coll = (function() {
+    var data = null;
+    $.ajax({
+	'async': false,
+	'url': '{{ site.data }}/college_comp.geojson',
 	'dataType': 'json',
 	'success':  function(data) {
 	    json = data;
@@ -93,9 +106,14 @@ map.on('load', function () {
 
     // DATA ----------------------------------------------------------
   
-    map.addSource('icons', {
+    map.addSource('icon_dat', {
     	type: 'geojson',
-    	data: data
+    	data: data_icon
+    });
+
+    map.addSource('college_dat', {
+    	type: 'geojson',
+    	data: data_coll
     });
 
     // XITLES --------------------------------------------------------
@@ -127,58 +145,94 @@ map.on('load', function () {
     // LAYERS --------------------------------------------------------
    
     map.addLayer({
-	'id': 'icons',
-	'type': 'symbol',
-	'source': 'icons',
-	'minzoom': minIconZoom,
-	'layout': {
-	    'visibility': 'visible',
-	    'icon-image': ['match',
-			   ['get', _cat, ['at', ['get', _id], ['literal', s]]],
-			   1, 'schoolad',
-			   2, 'schoolna',
-			   3, 'schooladnoc',
-			   4, 'schoolnanoc',
-			   5, 'college4',
-			   6, 'college4',
-			   7, 'college2',
-			   8, 'college2',
-			   9, 'community',
-			   'transparent'],
-	    'icon-allow-overlap': true,
-	    'icon-keep-upright': true,
-	    'icon-size': [
-		'interpolate', ['linear'], ['zoom'],
-		minIconZoom, [
-	    	    '*',
-	    	    ['/', 1, ['min',
-			      ['max',
-			       ['to-number',
-				['get', _csr, ['at', ['get', _id], ['literal', s]]],
-				(['to-number',
-				  ['get', _cat, ['at', ['get', _id], ['literal', s]]]
-				 ] == 9) ? comPct : colPct
-			       ],
-			       scr_min],
-			      scr_max]
-		    ],
-	    	    minIconZoomScale],
-		maxIconZoom, [
-	    	    '*',
-	    	    ['/', 1, ['min',
-			      ['max',
-			       ['to-number',
-				['get', _csr, ['at', ['get', _id], ['literal', s]]],
-				(['to-number',
-				  ['get', _cat, ['at', ['get', _id], ['literal', s]]]
-				 ] == 9) ? comPct : colPct
-			       ],
-			       scr_min],
-			      scr_max]
-		    ],
-	    	    maxIconZoomScale]
-	    ]
-	}
+    	'id': 'schools',
+    	'type': 'symbol',
+    	'source': 'icon_dat',
+    	'minzoom': minIconZoom,
+    	'layout': {
+    	    'visibility': 'visible',
+    	    'icon-image': ['match',
+    			   ['get', _cat, ['at', ['get', _id], ['literal', s]]],
+    			   1, 'schoolad',
+    			   2, 'schoolna',
+    			   3, 'schooladnoc',
+    			   4, 'schoolnanoc',
+    			   9, 'community',
+    			   'transparent'
+    			  ],
+    	    'icon-allow-overlap': true,
+    	    'icon-keep-upright': true,
+    	    'icon-size': [
+    		'interpolate', ['linear'], ['zoom'],
+    		minIconZoom, [
+    	    	    '*',
+    	    	    ['/', 1, ['min',
+    			      ['max',
+    			       ['to-number',
+    				['get', _csr, ['at', ['get', _id], ['literal', s]]],
+    				['to-number', comPct]
+    			       ],
+    			       scr_min],
+    			      scr_max]
+    		    ],
+    	    	    minIconZoomScale],
+    		maxIconZoom, [
+    	    	    '*',
+    	    	    ['/', 1, ['min',
+    			      ['max',
+    			       ['to-number',
+    				['get', _csr, ['at', ['get', _id], ['literal', s]]],
+    				['to-number', comPct]
+    			       ],
+    			       scr_min],
+    			      scr_max]
+    		    ],
+    	    	    maxIconZoomScale]
+    	    ]
+    	}
+    });
+
+    map.addLayer({
+    	'id': 'colleges',
+    	'type': 'symbol',
+    	'source': 'college_dat',
+    	'minzoom': minIconZoom,
+    	'layout': {
+    	    'visibility': 'visible',
+    	    'icon-image': ['match',
+    			   ['get', _cat, ['at', ['get', _id], ['literal', s]]],
+    			   5, 'college4',
+    			   6, 'college4',
+    			   7, 'college2',
+    			   8, 'college2',
+    			   'transparent'
+    			  ],
+    	    'icon-allow-overlap': true,
+    	    'icon-keep-upright': true,
+    	    'icon-ignore-placement': true,
+    	    'icon-size': [
+    		'interpolate', ['linear'], ['zoom'],
+    		minIconZoom, [
+    	    	    '*',
+    	    	    ['/', 1, ['min',
+    			      ['max',
+    			       ['to-number', colPct],
+    			       scr_min],
+    			      scr_max]
+    		    ],
+    	    	    minIconZoomScale],
+    		maxIconZoom, [
+    	    	    '*',
+    	    	    ['/', 1, ['min',
+    			      ['max',
+    			       ['to-number', colPct],
+    			       scr_min],
+    			      scr_max]
+    		    ],
+    	    	    maxIconZoomScale
+    		]
+    	    ]
+    	}
     });
     
     // SIDEBAR -------------------------------------------------------
@@ -189,17 +243,29 @@ map.on('load', function () {
 
     // POPUPS --------------------------------------------------------
 
-    map.on('mousemove', 'icons', function(e) {
-	if (!(swToggleCollege && getCatLabel(s[e.features[0].id][_cat]) === 'college')) {
-	    map.getCanvas().style.cursor = 'pointer';
-	    popup.create(e.features[0]);
-	}
+    // schools and community
+    map.on('mousemove', 'schools', function(e) {
+    	map.getCanvas().style.cursor = 'pointer';
+    	popup.create(e.features[0]);
     });
 
-    map.on('mouseleave', 'icons', function() {
+    map.on('mouseleave', 'schools', function() {
         map.getCanvas().style.cursor = '';
         popup.remove();
     });
+
+    // colleges
+    map.on('mousemove', 'colleges', function(e) {
+	if (!swToggleCollege) {
+	    map.getCanvas().style.cursor = 'pointer';
+    	    popup.create(e.features[0]);
+	}
+    });
+    map.on('mouseleave', 'colleges', function() {
+    	map.getCanvas().style.cursor = '';
+    	popup.remove();
+    });
+
 
     // INPUT BOX -----------------------------------------------------
 
@@ -209,8 +275,7 @@ map.on('load', function () {
 
     // COLLEGE TOGGLE BUTTON -----------------------------------------
 
-    elToggle.appendChild(createToggle('college', colPct, comPct, scr_min, scr_max));
-    // elToggle.appendChild(createToggle('adjustcsr', colPct, comPct, scr_min, scr_max));
+    elToggle.appendChild(createToggle('colleges'));
     
     // CONTROLS ------------------------------------------------------
 
@@ -243,7 +308,7 @@ map.on('load', function () {
     // INIT EMPTY LISTINGS -------------------------------------------
     
     renderListings([]);
- 
+    
 });
 
     

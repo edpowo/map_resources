@@ -7,10 +7,10 @@
 function getUniqueFeaturesByID(array) {
     var existingFeatureKeys = {};
     var uniqueFeatures = array.filter(function(el) {
-        if (existingFeatureKeys[el.id]) {
+        if (existingFeatureKeys[el.properties[_id]]) {
             return false;
         } else {
-            existingFeatureKeys[el.id] = true;
+            existingFeatureKeys[el.properties[_id]] = true;
             return true;
         }
     });
@@ -29,8 +29,8 @@ function renderListings(features) {
 	elFilter.style.color = '#000';
 	// sort so that they are listed alphabetically in list
 	features.sort(function(x,y) {
-	    if(s[x.id][_name] < s[y.id][_name]) return -1;
-	    if(s[x.id][_name] > s[y.id][_name]) return 1;
+	    if(s[x.properties[_id]][_name] < s[y.properties[_id]][_name]) return -1;
+	    if(s[x.properties[_id]][_name] > s[y.properties[_id]][_name]) return 1;
 	    return 0; 
 	});
 	// filter if colleges are toggled off
@@ -92,7 +92,10 @@ function renderListings(features) {
 	}
 	empty.textContent = message;
 	// remove features filter
-        map.setFilter('icons', ['has', '$id']);
+        map.setFilter('schools', ['has', '$id']);
+	if (!swToggleCollege) {
+	    map.setFilter('colleges', ['has', '$id']);
+	}
     }
 }
 
@@ -100,14 +103,17 @@ function addToVisible() {
     // reset if bad input in filter
     if (swNoFilterMatch) {
 	swNoFilterMatch = swFilter = false;
-	map.setFilter('icons', ['has', '$id']);
+	map.setFilter('schools', ['has', '$id']);
+	if (!swToggleCollege) {
+	    map.setFilter('colleges', ['has', '$id']);
+	}
     }
-    var filter = (swToggleCollege ? iconFilterColleges() : false);
-    // get rendered features 
-    var features = map.queryRenderedFeatures({
-	layers :['icons'],
-	filter : filter
-    });   
+    var filter = (swToggleCollege ? ['!in', 'colleges'] : false);
+    var features = map.queryRenderedFeatures({ 
+    	layers :['schools','colleges'],
+	filter: filter
+    });
+    
     if (features) {
 	// limit to unique features
         var uniqueFeatures = getUniqueFeaturesByID(features, 'id');
@@ -129,14 +135,20 @@ function textFilter(e, visible) {
     var inputText = normalize(e.target.value);
     // remove visible features that don't match the input value.
     var filtered = visible.filter(function(feature) {
-        var name = normalize(s[feature.id][_name]);
+        var name = normalize(s[feature.properties[_id]][_name]);
         return name.indexOf(inputText) > -1;
     });
     // populate the sidebar with filtered results
     renderListings(filtered);
     // set the filter to populate features into the layer
-    map.setFilter('icons', ['in', '$id'].concat(filtered.map(function(feature) {
+    map.setFilter('schools', ['in', '$id'].concat(filtered.map(function(feature) {
         return feature.id;
     })));
+    if (!swToggleCollege) {
+	map.setFilter('colleges', ['in', '$id'].concat(filtered.map(function(feature) {
+            return feature.id;
+	})));
+    }
     popup.remove();  
 }
+    

@@ -8,8 +8,9 @@
 var scale_hs_min = 1 - .90;	// values > 90th xtile clipped down
 var scale_hs_max = 1 - .10;	// values < 10th xtile scaled up
 
-var scale_colPct = 1 - .75;	// college icons 70th xtile of HS csr
+var scale_colPct = 1 - .75;	// college icons 75th xtile of HS csr
 var scale_comPct = 1 - .90;	// community icons 90th xtile of HS csr
+scale_colPct += .3;		// ...b/c not on same interpolated scale
 
 // -----------------------------------------------------------------------------
 // MIN / MAX ZOOM FOR ICONS VISIBILITY / SCALING (0 - 24) 
@@ -48,9 +49,12 @@ var _fips = 'c';		// c := fips
 var _enrl = 'd';		// d := enrollment (hs)
 var _frpl = 'e';		// e := frpl pct (hs)
 var _csr  = 'f';		// f := stu/cou ratio (hs)
-var _advo = 'g';		// g := hs advising orgs
-var _csrf = 'h';		// h := hs missing csr
-var _zip  = 'i';		// i := zip code
+var _csrf = 'g';		// g := hs missing csr
+var _zip  = 'h';		// h := zip code
+var _advo = 'i';		// i := organization name
+var _divo = 'j';		// j := division name
+var _trio = 'k';		// k := trio subprogram
+var _web  = 'l';		// l := website
 
 // -----------------------------------------------------------------------------
 // GEO DATA ID 
