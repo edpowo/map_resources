@@ -40,7 +40,18 @@ mapboxgl.Popup.prototype.text = function(feature) {
 	if (icon.advorgs !== '-') {
 	    htmlstr += "<h3>Advising organizations</h3>";
 	    for (i = 0; i < icon.advorgs.length; i++) {
-		htmlstr += icon.advorgs[i] + "</br>";
+		if (icon.advorgs[i] !== '' && i > 0) {
+		    htmlstr += "<hr>";
+		}
+		if (icon.advorgs[i] !== '') {
+		    htmlstr += "<b>Name:</b> " + icon.advorgs[i] + "</br>";
+		}
+		if (icon.advdiv[i] !== '') {
+		    htmlstr += "<b>Division:</b> " + icon.advdiv[i] + "</br>";
+		}
+		if (icon.web[i] !== '') {
+		    htmlstr += "<b>URL:</b> " + icon.web[i] + "</br>";
+		}
 	    }
 	}
     } else if (isCM) {
@@ -48,7 +59,18 @@ mapboxgl.Popup.prototype.text = function(feature) {
 	    + icon.zip + "</h2></div>";
 	htmlstr += "<h3>Advising organizations</h3>";
 	    for (i = 0; i < icon.advorgs.length; i++) {
-		htmlstr += icon.advorgs[i] + "</br>";
+		if (icon.advorgs[i] !== '' && i > 0) {
+		    htmlstr += "<hr>";
+		}
+		if (icon.advorgs[i] !== '') {
+		    htmlstr += "<b>Name:</b> " + icon.advorgs[i] + "</br>";
+		}
+		if (icon.advdiv[i] !== '') {
+		    htmlstr += "<b>Division:</b> " + icon.advdiv[i] + "</br>";
+		}
+		if (icon.web[i] !== '') {
+		    htmlstr += "<b>URL:</b> " + icon.web[i] + "</br>";
+		}
 	    }
     } else {
 	htmlstr = "<div class='pu-header'><h2>" + icon.name + "</h2></div>";

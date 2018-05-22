@@ -99,7 +99,7 @@ college <- read_csv(file.path(rdir, 'HD2015.zip')) %>%
 ## -------------------------------------
 
 ## read in school data
-hs <- read_csv(file.path(rdir, 'school_level_clean.csv')) %>%
+hs <- read_csv(file.path(rdir, 'school_level_clean_2.csv')) %>%
     setNames(tolower(names(.))) %>%
     select(nces_id,
            nces_dist_id,
@@ -109,12 +109,12 @@ hs <- read_csv(file.path(rdir, 'school_level_clean.csv')) %>%
            lat = school_latitude,
            enroltot = school_enrollment_total,
            frlpct = school_frl_pct,
-           csr = school_stu_cou_ratio) %>%
+           csr = school_student_counselor_ratio) %>%
+    mutate(fips = as.integer(fips)) %>%
     filter(fips %in% cw$stfips) %>%
     mutate(instnm = str_to_title_mod(instnm),
            lon = as.numeric(lon),
-           lat = as.numeric(lat),
-           fips = as.integer(fips)) %>%
+           lat = as.numeric(lat)) %>%
     filter(!is.na(lon),
            !is.na(lat))
 
@@ -124,10 +124,79 @@ hs_imp <- hs %>%
     ungroup()
 
 ## advising programs at school level
-advise <- read_csv(file.path(rdir, 'advising_program_school_clean.csv')) %>%
+advise_tmp <- read_csv(file.path(rdir, 'advising_program_school_clean.csv')) %>%
     setNames(tolower(names(.))) %>%
-    unite(advise_org, c('org_1','org_2'), sep = '|') %>%
-    mutate(advise_org = gsub('\\|NA$', '', advise_org))
+    mutate(trio_subprogram = ifelse(trio_subprogram == 'N/A', NA,
+                                    trio_subprogram)) %>%
+    ## need to make wide
+    arrange(nces_id) %>%
+    group_by(nces_id) %>%
+    mutate(count = seq(n())) %>%
+    rename(org_1 = organization_name,
+           div_1 = division_name,
+           tri_1 = trio_subprogram,
+           web_1 = website) %>%
+    mutate(org_2 = ifelse(count == 2, org_1, NA),
+           div_2 = ifelse(count == 2, div_1, NA),
+           tri_2 = ifelse(count == 2, tri_1, NA),
+           web_2 = ifelse(count == 2, web_1, NA),
+           org_3 = ifelse(count == 3, org_1, NA),
+           div_3 = ifelse(count == 3, org_1, NA),
+           tri_3 = ifelse(count == 3, org_1, NA),
+           web_3 = ifelse(count == 3, org_1, NA),
+           org_4 = ifelse(count == 4, org_1, NA),
+           div_4 = ifelse(count == 4, org_1, NA),
+           tri_4 = ifelse(count == 4, org_1, NA),
+           web_4 = ifelse(count == 4, org_1, NA),
+           org_5 = ifelse(count == 5, org_1, NA),
+           div_5 = ifelse(count == 5, org_1, NA),
+           tri_5 = ifelse(count == 5, org_1, NA),
+           web_5 = ifelse(count == 5, org_1, NA),
+           org_6 = ifelse(count == 6, org_1, NA),
+           div_6 = ifelse(count == 6, org_1, NA),
+           tri_6 = ifelse(count == 6, org_1, NA),
+           web_6 = ifelse(count == 6, org_1, NA),
+           org_7 = ifelse(count == 7, org_1, NA),
+           div_7 = ifelse(count == 7, org_1, NA),
+           tri_7 = ifelse(count == 7, org_1, NA),
+           web_7 = ifelse(count == 7, org_1, NA),
+           org_8 = ifelse(count == 8, org_1, NA),
+           div_8 = ifelse(count == 8, org_1, NA),
+           tri_8 = ifelse(count == 8, org_1, NA),
+           web_8 = ifelse(count == 8, org_1, NA))
+
+advise <- advise_tmp %>%
+    filter(count == 1) %>%
+    select(nces_id, ends_with('_1')) %>%
+    left_join(advise_tmp %>%
+              filter(count == 2) %>%
+              select(nces_id, ends_with('_2')), by = 'nces_id') %>%
+    left_join(advise_tmp %>%
+              filter(count == 3) %>%
+              select(nces_id, ends_with('_3')), by = 'nces_id') %>%
+    left_join(advise_tmp %>%
+              filter(count == 4) %>%
+              select(nces_id, ends_with('_4')), by = 'nces_id') %>%
+    left_join(advise_tmp %>%
+              filter(count == 5) %>%
+              select(nces_id, ends_with('_5')), by = 'nces_id') %>%
+    left_join(advise_tmp %>%
+              filter(count == 6) %>%
+              select(nces_id, ends_with('_6')), by = 'nces_id') %>%
+    left_join(advise_tmp %>%
+              filter(count == 7) %>%
+              select(nces_id, ends_with('_7')), by = 'nces_id') %>%
+    left_join(advise_tmp %>%
+              filter(count == 8) %>%
+              select(nces_id, ends_with('_8')), by = 'nces_id') %>%
+    unite(advise_org, starts_with('org_'), sep = '|') %>%
+    mutate(advise_org = gsub('NA', '', advise_org)) %>%
+    unite(advise_div, starts_with('div_'), sep = '|') %>%
+    mutate(advise_div = gsub('NA', '', advise_div)) %>%
+    unite(advise_tri, starts_with('tri_'), sep = '|') %>%
+    mutate(advise_tri = gsub('NA', '', advise_tri)) %>%
+    unite(advise_web, starts_with('web_'), sep = '|') %>%
+    mutate(advise_web = gsub('NA', '', advise_web))
 
 ## merge into high school data
 hs <- hs %>%
@@ -149,9 +218,9 @@ hs <- hs %>%
 ## advising programs at school level
 community <- read_csv(file.path(rdir, 'advising_program_community_clean.csv')) %>%
     setNames(tolower(names(.))) %>%
-    unite(advise_org, c('org_1','org_2','org_3'), sep = '|') %>%
-    mutate(advise_org = gsub('\\|NA$|\\|NA\\|NA$', '', advise_org),
-           zip = sprintf('%05d', zip))
+    rename(advise_org = organization_name,
+           advise_div = division_name,
+           advise_web = website)
 
 ## get zipcode geo
 zipgeo <- read_tsv(file.path(rdir, '2016_Gaz_zcta_national.zip')) %>%
@@ -166,7 +235,7 @@ community <- community %>%
     left_join(zipgeo) %>%
     mutate(cat = 9) %>%
     ## need to fix!
-    na.omit()
+    drop_na(lon)
 
 ################################################################################
 ## COMBINE & WRITE
@@ -174,7 +243,8 @@ community <- community %>%
 
 ## bind
 df <- bind_rows(college, hs, community) %>%
-    mutate(z = row_number()) %>%             # redundant id #
+    mutate(z = row_number(),                 # redundant id #
+           cat = as.integer(cat)) %>%
     ## rename for very small names
     rename(a = cat,                          # a := category
            b = instnm,                       # b := name
@@ -182,9 +252,12 @@ df <- bind_rows(college, hs, community) %>%
            d = enroltot,                     # d := enrollment (hs)
            e = frlpct,                       # e := frpl pct (hs)
            f = csr,                          # f := stu/cou ratio (hs)
-           g = advise_org,                   # g := hs advising orgs
-           h = csr_flag,                     # h := missing csr
-           i = zip)                          # i := zip code
+           g = csr_flag,                     # g := missing csr
+           h = zip,                          # h := zip code
+           i = advise_org,                   # i := organization name
+           j = advise_div,                   # h := division name
+           k = advise_tri,                   # i := trio subprogram
+           l = advise_web)                   # l := website
 
 ## split by schools/community and college
 df_coll <- df %>% filter(a %in% c(5:8))
@@ -203,7 +276,7 @@ geojson_write(input = dfsp_coll, file = file.path(ddir, 'college.geojson'))
 geojson_write(input = dfsp_icon, file = file.path(ddir, 'icon.geojson'))
 
 ## write all data as minified JS
-writeJSArray(df, 's', letters[1:9], file.path(jdir, 'all_icon_array.js'))
+writeJSArray(df, 's', letters[1:12], file.path(jdir, 'all_icon_array.js'))
 
 ## =============================================================================
 ## END FILE

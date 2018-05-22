@@ -49,9 +49,12 @@ var _fips = 'c';		// c := fips
 var _enrl = 'd';		// d := enrollment (hs)
 var _frpl = 'e';		// e := frpl pct (hs)
 var _csr  = 'f';		// f := stu/cou ratio (hs)
-var _advo = 'g';		// g := hs advising orgs
-var _csrf = 'h';		// h := hs missing csr
-var _zip  = 'i';		// i := zip code
+var _csrf = 'g';		// g := hs missing csr
+var _zip  = 'h';		// h := zip code
+var _advo = 'i';		// i := organization name
+var _divo = 'j';		// j := division name
+var _trio = 'k';		// k := trio subprogram
+var _web  = 'l';		// l := website
 
 // -----------------------------------------------------------------------------
 // GEO DATA ID 
