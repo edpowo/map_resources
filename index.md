@@ -44,9 +44,10 @@ custom_js:
 		<div class='col-footer'>
 		<div class='ftspace'></div>
 		<div class='ft'> 
-			<a href='{{ site.baseurl }}/about'>About</a> | 
-			<a href='{{ site.baseurl }}/corrections'>Corrections</a> | 
-			<a href='{{ site.github }}'>Code</a> 
+			<a href='{{ site.baseurl }}/about'>About this Map</a> | 
+			<a href='{{ site.github }}' title='Get map code'><i class='fab fa-github
+		fa-lg'></i></a> |
+		<a href='{{ site.mapdata }}' title='Get map data'><i class='fas fa-database'></i></a>
 		</div>
 		</div>
 	</div>

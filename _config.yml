@@ -11,6 +11,7 @@ images:         '/map_resources/assets/images'
 css:            '/map_resources/assets/css'
 js:             '/map_resources/assets/js'
 data:           '/map_resources/assets/data'
+mapdata:        '/map_resources/assets/data/map_data.csv'
 
 # style
 highlighter:    rouge
