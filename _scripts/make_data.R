@@ -101,6 +101,7 @@ college <- read_csv(file.path(rdir, 'HD2015.zip')) %>%
 ## read in school data
 hs <- read_csv(file.path(rdir, 'school_level_clean_2.csv')) %>%
     setNames(tolower(names(.))) %>%
+    filter(school_type == '1-Regular school') %>%
     select(nces_id,
            nces_dist_id,
            instnm = school_name,
@@ -109,7 +110,9 @@ hs <- read_csv(file.path(rdir, 'school_level_clean_2.csv')) %>%
            lat = school_latitude,
            enroltot = school_enrollment_total,
            frlpct = school_frl_pct,
-           csr = school_student_counselor_ratio) %>%
+           csr = school_student_counselor_ratio,
+           charter,
+           magnet) %>%
     mutate(fips = as.integer(fips)) %>%
     filter(fips %in% cw$stfips) %>%
     mutate(instnm = str_to_title_mod(instnm),
@@ -141,29 +144,29 @@ advise_tmp <- read_csv(file.path(rdir, 'advising_program_school_clean.csv')) %>%
            tri_2 = ifelse(count == 2, tri_1, NA),
            web_2 = ifelse(count == 2, web_1, NA),
            org_3 = ifelse(count == 3, org_1, NA),
-           div_3 = ifelse(count == 3, org_1, NA),
-           tri_3 = ifelse(count == 3, org_1, NA),
-           web_3 = ifelse(count == 3, org_1, NA),
+           div_3 = ifelse(count == 3, div_1, NA),
+           tri_3 = ifelse(count == 3, tri_1, NA),
+           web_3 = ifelse(count == 3, web_1, NA),
            org_4 = ifelse(count == 4, org_1, NA),
-           div_4 = ifelse(count == 4, org_1, NA),
-           tri_4 = ifelse(count == 4, org_1, NA),
-           web_4 = ifelse(count == 4, org_1, NA),
+           div_4 = ifelse(count == 4, div_1, NA),
+           tri_4 = ifelse(count == 4, tri_1, NA),
+           web_4 = ifelse(count == 4, web_1, NA),
            org_5 = ifelse(count == 5, org_1, NA),
-           div_5 = ifelse(count == 5, org_1, NA),
-           tri_5 = ifelse(count == 5, org_1, NA),
-           web_5 = ifelse(count == 5, org_1, NA),
+           div_5 = ifelse(count == 5, div_1, NA),
+           tri_5 = ifelse(count == 5, tri_1, NA),
+           web_5 = ifelse(count == 5, web_1, NA),
            org_6 = ifelse(count == 6, org_1, NA),
-           div_6 = ifelse(count == 6, org_1, NA),
-           tri_6 = ifelse(count == 6, org_1, NA),
-           web_6 = ifelse(count == 6, org_1, NA),
+           div_6 = ifelse(count == 6, div_1, NA),
+           tri_6 = ifelse(count == 6, tri_1, NA),
+           web_6 = ifelse(count == 6, web_1, NA),
            org_7 = ifelse(count == 7, org_1, NA),
-           div_7 = ifelse(count == 7, org_1, NA),
-           tri_7 = ifelse(count == 7, org_1, NA),
-           web_7 = ifelse(count == 7, org_1, NA),
+           div_7 = ifelse(count == 7, div_1, NA),
+           tri_7 = ifelse(count == 7, tri_1, NA),
+           web_7 = ifelse(count == 7, web_1, NA),
            org_8 = ifelse(count == 8, org_1, NA),
-           div_8 = ifelse(count == 8, org_1, NA),
-           tri_8 = ifelse(count == 8, org_1, NA),
-           web_8 = ifelse(count == 8, org_1, NA))
+           div_8 = ifelse(count == 8, div_1, NA),
+           tri_8 = ifelse(count == 8, tri_1, NA),
+           web_8 = ifelse(count == 8, web_1, NA))
 
 advise <- advise_tmp %>%
     filter(count == 1) %>%
@@ -241,8 +244,14 @@ community <- community %>%
 ## COMBINE & WRITE
 ################################################################################
 
-## bind
-df <- bind_rows(college, hs, community) %>%
+## bind for primary data set
+df <- bind_rows(college, hs, community)
+
+## -------------------------------------
+## JSON
+## -------------------------------------
+
+df <- df %>%
     mutate(z = row_number(),                 # redundant id #
            cat = as.integer(cat)) %>%
     ## rename for very small names
@@ -257,7 +266,9 @@ df <- bind_rows(college, hs, community) %>%
            i = advise_org,                   # i := organization name
            j = advise_div,                   # h := division name
            k = advise_tri,                   # i := trio subprogram
-           l = advise_web)                   # l := website
+           l = advise_web,                   # l := website
+           m = magnet,                       # m := magnet (hs)
+           n = charter)                      # n := charter (hs)
 
 ## split by schools/community and college
 df_coll <- df %>% filter(a %in% c(5:8))
@@ -276,7 +287,40 @@ geojson_write(input = dfsp_coll, file = file.path(ddir, 'college.geojson'))
 geojson_write(input = dfsp_icon, file = file.path(ddir, 'icon.geojson'))
 
 ## write all data as minified JS
-writeJSArray(df, 's', letters[1:12], file.path(jdir, 'all_icon_array.js'))
+writeJSArray(df, 's', letters[1:14], file.path(jdir, 'all_icon_array.js'))
+
+## -------------------------------------
+## CSV
+## -------------------------------------
+
+## rebind for primary data set
+df <- bind_rows(college, hs, community)
+
+df <- df %>%
+    mutate(type = case_when(
+               cat %in% 1:4 ~ 'high school',
+               cat %in% 5:8 ~ 'college',
+               cat == 9 ~ 'community')
+           ) %>%
+    separate(advise_org, paste0('advise_org_', 1:8), sep = '\\|',
+             extra = 'merge', fill = 'right') %>%
+    separate(advise_div, paste0('advise_div_', 1:8), sep = '\\|',
+             extra = 'merge', fill = 'right') %>%
+    separate(advise_tri, paste0('advise_tri_', 1:8), sep = '\\|',
+             extra = 'merge', fill = 'right') %>%
+    separate(advise_web, paste0('advise_web_', 1:8), sep = '\\|',
+             extra = 'merge', fill = 'right') %>%
+    mutate_at(vars(contains('advise_')),
+              funs(ifelse(. == '', NA, .))) %>%
+    select(-csr_flag, -csr_mean, -cat, -advise_org_8, -advise_div_8,
+           -advise_tri_6, -advise_tri_7, -advise_tri_8, -advise_web_8) %>%
+    select(type, instnm, zip, fips, lon, lat, enroltot, frlpct, csr,
+           magnet, charter,
+           contains('advise_org'), contains('advise_div'),
+           contains('advise_tri'), contains('advise_web'))
+
+## write
+write_csv(df, file.path(ddir, 'map_data.csv'))
 
 ## =============================================================================
 ## END FILE

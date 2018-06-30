@@ -55,6 +55,8 @@ var _advo = 'i';		// i := organization name
 var _divo = 'j';		// j := division name
 var _trio = 'k';		// k := trio subprogram
 var _web  = 'l';		// l := website
+var _mag  = 'm';		// m := magnet (hs)
+var _cha  = 'n';		// n := charter (hs)
 
 // -----------------------------------------------------------------------------
 // GEO DATA ID 
