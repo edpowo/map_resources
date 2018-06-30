@@ -14,6 +14,8 @@ function Icon(feature) {
     this.csr = s[feature.properties[_id]][_csr] || '-';
     this.csr_flag = s[feature.properties[_id]][_csrf] || '-';
     this.zip = s[feature.properties[_id]][_zip] || '-';
+    this.magnet = s[feature.properties[_id]][_mag] || '-';
+    this.charter = s[feature.properties[_id]][_cha] || '-';
     var advorgs = s[feature.properties[_id]][_advo];
     this.advorgs = (advorgs != undefined ? advorgs.split('|') : '-');
     var divorgs = s[feature.properties[_id]][_divo];

@@ -18,10 +18,16 @@ custom_js:
 		<div class='col-header'>
 			<h2>College Advising Resource Map</h2>	
 		</div>
+		<div class='col-subheader'>
+			<a href='{{ site.baseurl }}/about'>About this map</a>	
+		</div>
 		<div id='instructions'>
+		<br/>
 			<p>Use this interactive map to explore college advising resources
-				available in high schools and communities across the country.</p>
-			<h3>Instructions</h3>
+				available in high schools and communities across the
+	country.</p>
+	<br/>
+			<h3>How to use this map</h3>
 			<p><i class='fas fa-search fa-lg fa-fw'></i>
 				<b>Search</b> using place name ("Charlottesville, VA") or zip code ("22901")</p>
 			<p><i class='fas fa-crosshairs fa-lg fa-fw'></i>
@@ -29,7 +35,19 @@ custom_js:
 			<p><i class='far fa-hand-pointer fa-lg fa-fw'></i>
 				<b>Drag, click, and zoom</b> to manually explore.</p>
 			<p><i class='fas fa-mouse-pointer fa-lg fa-fw'></i>
-				<b>Click the toggle button</b> in the upper left to hide / show college icons</p>		
+				<b>Click the toggle button</b> in the upper left to
+	hide / show college icons</p>	
+	<br/>
+		<h3>Legend</h3>
+		<p><img src='{{ site.images }}/school-32.png'>High school</p>
+		<p><img src='{{ site.images }}/school-adv-32.png'>High school with advising resource</p>
+		<p><img src='{{ site.images }}/college-2-32.png'>Two-year college</p>
+		<p><img src='{{ site.images }}/college-4-32.png'>Four-year college</p>
+		<p><img src='{{ site.images }}/community-32.png'>Community-based advising organization</p>
+		<!-- Hack to make sure scroll for full legend -->
+	<br/>
+	<br/>
+	
 	    </div>
 		<div class='col-list'>
 		
@@ -44,10 +62,9 @@ custom_js:
 		<div class='col-footer'>
 		<div class='ftspace'></div>
 		<div class='ft'> 
-			<a href='{{ site.baseurl }}/about'>About this Map</a> | 
-			<a href='{{ site.github }}' title='Get map code'><i class='fab fa-github
-		fa-lg'></i></a> |
-		<a href='{{ site.mapdata }}' title='Get map data'><i class='fas fa-database'></i></a>
+		<a href='{{ site.github }}' title='Get map code'>Code</a> |
+		<a href='{{ site.mapdata }}' title='Get map data' download='mapdata.csv'>Data</a> |
+		<a href='{{ site.form }}' title='Suggest improvements'>Suggest improvements</a> 
 		</div>
 		</div>
 	</div>

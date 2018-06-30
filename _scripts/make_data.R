@@ -101,6 +101,7 @@ college <- read_csv(file.path(rdir, 'HD2015.zip')) %>%
 ## read in school data
 hs <- read_csv(file.path(rdir, 'school_level_clean_2.csv')) %>%
     setNames(tolower(names(.))) %>%
+    filter(school_type == '1-Regular school') %>%
     select(nces_id,
            nces_dist_id,
            instnm = school_name,
@@ -109,7 +110,9 @@ hs <- read_csv(file.path(rdir, 'school_level_clean_2.csv')) %>%
            lat = school_latitude,
            enroltot = school_enrollment_total,
            frlpct = school_frl_pct,
-           csr = school_student_counselor_ratio) %>%
+           csr = school_student_counselor_ratio,
+           charter,
+           magnet) %>%
     mutate(fips = as.integer(fips)) %>%
     filter(fips %in% cw$stfips) %>%
     mutate(instnm = str_to_title_mod(instnm),
@@ -263,7 +266,9 @@ df <- df %>%
            i = advise_org,                   # i := organization name
            j = advise_div,                   # h := division name
            k = advise_tri,                   # i := trio subprogram
-           l = advise_web)                   # l := website
+           l = advise_web,                   # l := website
+           m = magnet,                       # m := magnet (hs)
+           n = charter)                      # n := charter (hs)
 
 ## split by schools/community and college
 df_coll <- df %>% filter(a %in% c(5:8))
@@ -282,7 +287,7 @@ geojson_write(input = dfsp_coll, file = file.path(ddir, 'college.geojson'))
 geojson_write(input = dfsp_icon, file = file.path(ddir, 'icon.geojson'))
 
 ## write all data as minified JS
-writeJSArray(df, 's', letters[1:12], file.path(jdir, 'all_icon_array.js'))
+writeJSArray(df, 's', letters[1:14], file.path(jdir, 'all_icon_array.js'))
 
 ## -------------------------------------
 ## CSV
@@ -310,6 +315,7 @@ df <- df %>%
     select(-csr_flag, -csr_mean, -cat, -advise_org_8, -advise_div_8,
            -advise_tri_6, -advise_tri_7, -advise_tri_8, -advise_web_8) %>%
     select(type, instnm, zip, fips, lon, lat, enroltot, frlpct, csr,
+           magnet, charter,
            contains('advise_org'), contains('advise_div'),
            contains('advise_tri'), contains('advise_web'))
 

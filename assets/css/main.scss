@@ -128,7 +128,7 @@ $col-width-portrait: $map-width-portrait;
     min-height: $header-min-px-sm;
     width: 100%;
     background: $header-background;
-    border-bottom: 5px solid $header-bottom-line-color;
+    // border-bottom: 5px solid $header-bottom-line-color;
     color: $header-color;
     display: flex;
     align-items: center;
@@ -139,6 +139,32 @@ $col-width-portrait: $map-width-portrait;
     @include large {
 	min-height: $header-min-px-lg;
     }    
+}
+
+.col-subheader {
+    height: 2%;
+    min-height: $subheader-min-px-sm;
+    width: 100%;
+    background: $subheader-background;
+    color: $subheader-color;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    @include medium {
+	min-height: $subheader-min-px-md;
+    }
+    @include large {
+	min-height: $subheader-min-px-lg;
+    }
+    a {
+	color: $subheader-link;
+	text-decoration: none;
+    }
+    a:hover, a.active:hover {
+	color: $subheader-link-hover;
+	text-decoration: underline;
+    }
 }
 
 .col-footer {
@@ -169,7 +195,7 @@ $col-width-portrait: $map-width-portrait;
 
 .ft {
     text-align: center;
-    height: 60%;
+    height: 70%;
     min-height: calc(100% - (#{$footer-min-px-sm} / 2));
     @include medium {
 	min-height: calc(100% - (#{$footer-min-px-md} / 2));
@@ -180,7 +206,7 @@ $col-width-portrait: $map-width-portrait;
 }
 
 .ftspace {
-    height: 40%;
+    height: 30%;
     min-height: calc(100% - (#{$footer-min-px-sm} / 2) - 1);
     @include medium {
 	min-height: calc(100% - (#{$footer-min-px-md} / 2) - 1);
@@ -239,13 +265,18 @@ $col-width-portrait: $map-width-portrait;
     left: 0;
     height: 90%;
     overflow: auto;
-    max-height: calc(98% - #{$header-min-px-sm} - #{$footer-min-px-sm});     
+    max-height: calc(98% - #{$header-min-px-sm} - #{$footer-min-px-sm});
+    img {
+	margin-right: 1rem;
+	vertical-align: middle;
+    }
     @include medium {
 	max-height: calc(98% - #{$header-min-px-md} - #{$footer-min-px-md});
     }
     @include large {
 	max-height: calc(98% - #{$header-min-px-lg} - #{$footer-min-px-lg});
     }
+    
 }
 
 // -----------------------------------------------------------------------------
@@ -422,22 +453,15 @@ $main-width-lg: 50%;
 
 main {
     width: $main-width-sm;
-    margin: 0 auto 3rem;
-    padding: 0 2rem;
+    margin: 2rem auto 3rem;
+    padding: 1rem 2rem;
+    background: $white;
     @include medium {
 	width: $main-width-md;
     }
     @include large {
 	width: $main-width-lg;
     }
-
-    .line { 
-	margin: 2rem 0;
-	height: 1px;
-	background: black;
-	background: -webkit-gradient(linear, 0 0, 100% 0, from(white),
-				     to(white), color-stop(50%, black));
-}
 }
 
 .page-header {

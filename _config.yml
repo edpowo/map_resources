@@ -24,3 +24,6 @@ mapstyle:	light-v9
 icon:
   shortname:    'Advising'
   longname:     'College Advising Resources Interactive Map'
+
+# google form
+form:		https://docs.google.com/forms/d/e/1FAIpQLSeh6qqOwji2q8oEEKWEMR8T5pyoQZCc6oN4oO9d_CtyTAEvfg/viewform
