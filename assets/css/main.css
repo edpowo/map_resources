@@ -110,7 +110,6 @@ body {
   min-height: 36px;
   width: 100%;
   background: #232d4b;
-  border-bottom: 5px solid #e57200;
   color: white;
   display: flex;
   align-items: center;
@@ -121,6 +120,29 @@ body {
   @media only screen and (min-width: 1200px) {
     .col-header {
       min-height: 50px; } }
+
+.col-subheader {
+  height: 2%;
+  min-height: 23px;
+  width: 100%;
+  background: #e57200;
+  color: white;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+  @media only screen and (min-width: 680px) and (max-width: 1200px) {
+    .col-subheader {
+      min-height: 30px; } }
+  @media only screen and (min-width: 1200px) {
+    .col-subheader {
+      min-height: 30px; } }
+  .col-subheader a {
+    color: white;
+    text-decoration: none; }
+  .col-subheader a:hover, .col-subheader a.active:hover {
+    color: #232d4b;
+    text-decoration: underline; }
 
 .col-footer {
   position: absolute;
@@ -137,7 +159,7 @@ body {
       min-height: 30px; } }
   @media only screen and (min-width: 1200px) {
     .col-footer {
-      min-height: 50px; } }
+      min-height: 40px; } }
   .col-footer a {
     color: white;
     text-decoration: none; }
@@ -147,24 +169,24 @@ body {
 
 .ft {
   text-align: center;
-  height: 60%;
+  height: 70%;
   min-height: calc(100% - (24px / 2)); }
   @media only screen and (min-width: 680px) and (max-width: 1200px) {
     .ft {
       min-height: calc(100% - (30px / 2)); } }
   @media only screen and (min-width: 1200px) {
     .ft {
-      min-height: calc(100% - (50px / 2)); } }
+      min-height: calc(100% - (40px / 2)); } }
 
 .ftspace {
-  height: 40%;
+  height: 30%;
   min-height: calc(100% - (24px / 2) - 1); }
   @media only screen and (min-width: 680px) and (max-width: 1200px) {
     .ftspace {
       min-height: calc(100% - (30px / 2) - 1); } }
   @media only screen and (min-width: 1200px) {
     .ftspace {
-      min-height: calc(100% - (50px / 2) - 1); } }
+      min-height: calc(100% - (40px / 2) - 1); } }
 
 .col-list {
   height: 90%;
@@ -176,7 +198,7 @@ body {
       max-height: calc(98% - 50px - 30px); } }
   @media only screen and (min-width: 1200px) {
     .col-list {
-      max-height: calc(98% - 50px - 50px); } }
+      max-height: calc(98% - 50px - 40px); } }
 
 @media (orientation: landscape) {
   .mapboxgl-ctrl-geocoder {
@@ -206,12 +228,15 @@ body {
   height: 90%;
   overflow: auto;
   max-height: calc(98% - 36px - 24px); }
+  #instructions img {
+    margin-right: 1rem;
+    vertical-align: middle; }
   @media only screen and (min-width: 680px) and (max-width: 1200px) {
     #instructions {
       max-height: calc(98% - 50px - 30px); } }
   @media only screen and (min-width: 1200px) {
     #instructions {
-      max-height: calc(98% - 50px - 50px); } }
+      max-height: calc(98% - 50px - 40px); } }
 
 #toggle {
   background: white;
@@ -336,19 +361,15 @@ table {
 
 main {
   width: 80%;
-  margin: 0 auto 3rem;
-  padding: 0 2rem; }
+  margin: 2rem auto 3rem;
+  padding: 1rem 2rem;
+  background: white; }
   @media only screen and (min-width: 680px) and (max-width: 1200px) {
     main {
       width: 70%; } }
   @media only screen and (min-width: 1200px) {
     main {
       width: 50%; } }
-  main .line {
-    margin: 2rem 0;
-    height: 1px;
-    background: black;
-    background: -webkit-gradient(linear, 0 0, 100% 0, from(white), to(white), color-stop(50%, black)); }
 
 .page-header > h1 {
   text-align: center; }

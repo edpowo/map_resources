@@ -20,12 +20,18 @@ mapboxgl.Popup.prototype.text = function(feature) {
     isCM = (lab === 'community');
 
     if (isHS) {
+	isMagnet = (icon.magnet == 1 ? 'Yes' : 'No')
+	isCharter = (icon.charter == 1 ? 'Yes' : 'No')
 	htmlstr = "<div class='pu-header'><h2>" + icon.name + "</h2></div>";
 	htmlstr += "<table>";
 	htmlstr += "<tr><td>School enrollment</td>"
 	    + "<td class = 'num'>" + icon.enroll + "</td></tr>";
 	htmlstr += "<tr><td>FRPL (%)</td>"
 	    + "<td class = 'num'>" + icon.frpl + "</td></tr>";
+	htmlstr += "<tr><td>Magnet</td>"
+	    + "<td class = 'num'>" + isMagnet + "</td></tr>";
+	htmlstr += "<tr><td>Charter</td>"
+	    + "<td class = 'num'>" + isCharter + "</td></tr>";
 	if (icon.csr_flag == 1) {
 	    var csr = '-';
 	} else {
