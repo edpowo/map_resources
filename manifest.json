@@ -23,6 +23,6 @@
 	    "type": "image/png"
 	}
     ],
-    "start_url": "/index.html",
+    "start_url": "/map_resources/index.html",
     "display": "standalone"
 }
