@@ -1,0 +1,41 @@
+// media and shared
+
+// -----------------------------------------------------------------------------
+// media mixins
+// -----------------------------------------------------------------------------
+
+@mixin portrait {
+    @media (orientation: portrait) {
+	@content;
+    }
+}
+
+@mixin landscape {
+    @media (orientation: landscape) {
+	@content;
+    }
+}
+
+@mixin medium {
+    @media only screen
+    and (min-width: $breakpoint-md)
+    and (max-width: $breakpoint-lg) {
+	@content;
+    }
+}
+
+@mixin large {
+    @media only screen and (min-width: $breakpoint-lg) {
+	@content;
+    }
+}
+
+// -----------------------------------------------------------------------------
+// shared
+// -----------------------------------------------------------------------------
+
+// non-map column
+%col-shared {
+    background: #fff;
+    text-align: center;
+}

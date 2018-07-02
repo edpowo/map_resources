@@ -1,0 +1,94 @@
+// formatting variables
+
+// -----------------------------------------------------------------------------
+// colors
+// -----------------------------------------------------------------------------
+
+$jeffblue: rgba(035,045,075,1);
+$rtorange: rgba(229,114,000,1);
+$advgreen: rgba(101,152,035,1);
+$commgold: rgba(191,166,022,1);
+$zeroalph: rgba(255,255,255,0);
+$white: rgba(255,255,255,1);
+
+// -----------------------------------------------------------------------------
+// fonts
+// -----------------------------------------------------------------------------
+
+// face
+$font-stack: "Helvetica Neue", Arial, Helvetica, sans-serif;
+
+// sizes
+$font-size-sm: 8px;
+$font-size-md: 12px;
+$font-size-lg: 14px;
+
+// colors
+$footer-color: $white;
+$header-color: $white;
+$subheader-color: $white;
+$popup-header-color: $header-color;
+
+// -----------------------------------------------------------------------------
+// breakpoints
+// -----------------------------------------------------------------------------
+
+$breakpoint-sm: 320px;
+$breakpoint-md: 680px;
+$breakpoint-lg: 1200px;
+
+// -----------------------------------------------------------------------------
+// header/footer minimum sizes
+// -----------------------------------------------------------------------------
+
+$header-min-px-sm: 36px;
+$header-min-px-md: 50px;
+$header-min-px-lg: 50px;
+
+$subheader-min-px-sm: 23px;
+$subheader-min-px-md: 30px;
+$subheader-min-px-lg: 30px;
+
+$footer-min-px-sm: 24px;
+$footer-min-px-md: 30px;
+$footer-min-px-lg: 40px;
+
+// -----------------------------------------------------------------------------
+// links
+// -----------------------------------------------------------------------------
+
+// general
+$link-hover: $white;
+$link-active: $white;
+
+// listing
+$listing-link: #404;
+$listing-link-hover: #f0f0f0;
+
+// subheader
+$subheader-link: $white;
+$subheader-link-hover: $jeffblue;
+
+// footer
+$footer-link: $white;
+$footer-link-hover: $rtorange;
+
+// -----------------------------------------------------------------------------
+// backgrounds
+// -----------------------------------------------------------------------------
+
+$col-background: $white;
+$header-background: $jeffblue;
+$subheader-background: $rtorange;
+$footer-background: $jeffblue;
+$popup-background: $col-background;
+$popup-header-background: $header-background;
+
+// -----------------------------------------------------------------------------
+// edges
+// -----------------------------------------------------------------------------
+
+$header-bottom-line-color: $rtorange;
+$footer-top-line-color: $rtorange;
+
+
