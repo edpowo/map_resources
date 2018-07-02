@@ -22,6 +22,7 @@ custom_js:
 			<a href='{{ site.baseurl }}/about'>About this map</a>	
 		</div>
 		<div id='instructions'>
+		<div id='subinstructions'>
 		<br/>
 			<p>Use this interactive map to explore college advising resources
 				available in high schools and communities across the
@@ -37,6 +38,8 @@ custom_js:
 			<p><i class='fas fa-mouse-pointer fa-lg fa-fw'></i>
 				<b>Click the toggle button</b> in the upper left to
 	hide / show college icons</p>	
+	
+	</div>
 	<br/>
 		<h3>Legend</h3>
 		<p><img src='{{ site.images }}/school-32.png'>High school</p>

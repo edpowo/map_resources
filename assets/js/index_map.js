@@ -22,9 +22,9 @@ $( document ).ready(function() {
 	// two versions
 	if ("standalone" in window.navigator) {
 	    if(!window.navigator.standalone) {
-		$('#instructions').append(html);
+		$('#subinstructions').append(html);
 	    } else if (window.matchMedia('(display-mode: standalone)').matches) {
-		$('#instructions').append(html);
+		$('#subinstructions').append(html);
 	    }
 	}
     }
