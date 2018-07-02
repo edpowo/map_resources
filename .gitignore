@@ -2,7 +2,7 @@
 _*
 !_layouts/
 !_includes/
-!_sass/
+!_sass/_*
 !_scripts/
 !_config.yml
 # !_config_dev.yml
