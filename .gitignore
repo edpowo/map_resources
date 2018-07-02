@@ -2,7 +2,9 @@
 _*
 !_layouts/
 !_includes/
-!_sass/_*
+!_sass/_bullets.scss
+!_sass/_variables.scss
+!_sass/_media.scss
 !_scripts/
 !_config.yml
 # !_config_dev.yml
