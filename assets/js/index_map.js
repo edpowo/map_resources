@@ -23,7 +23,7 @@ $( document ).ready(function() {
 	if ("standalone" in window.navigator) {
 	    if(!window.navigator.standalone) {
 		$('#subinstructions').append(html);
-	    } else if (window.matchMedia('(display-mode: standalone)').matches) {
+	    } else if (!window.matchMedia('(display-mode: standalone)').matches) {
 		$('#subinstructions').append(html);
 	    }
 	}
@@ -51,7 +51,16 @@ var map = new mapboxgl.Map({
 // init popup 
 var popup = new mapboxgl.Popup({
     closeButton: false,
-    anchor: 'bottom'
+    offset: {
+    	'top': [top_x, top_y],
+    	'bottom': [bottom_x, bottom_y],
+    	'left': [left_x, left_y],
+    	'right': [right_x, right_y],
+    	'top-left': [top_left_x, top_left_y],
+    	'top-right': [top_right_x, top_right_y],
+    	'bottom-left': [bottom_left_x, bottom_left_y],
+    	'bottom-right': [bottom_right_x, bottom_right_y]
+    }
 });
 
 // init structure to hold visible points
@@ -246,7 +255,7 @@ map.on('load', function () {
     // schools and community
     map.on('mousemove', 'schools', function(e) {
     	map.getCanvas().style.cursor = 'pointer';
-    	popup.create(e.features[0]);
+	popup.create(e.features[0]);
     });
 
     map.on('mouseleave', 'schools', function() {
@@ -261,6 +270,7 @@ map.on('load', function () {
     	    popup.create(e.features[0]);
 	}
     });
+    
     map.on('mouseleave', 'colleges', function() {
     	map.getCanvas().style.cursor = '';
     	popup.remove();

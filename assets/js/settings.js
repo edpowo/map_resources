@@ -38,6 +38,29 @@ var flyToZoom = 11;
 var scaleControlWidth = 250;
 
 // -----------------------------------------------------------------------------
+// POPUP OFFSETS
+// -----------------------------------------------------------------------------
+
+var popShift = 0;
+
+var top_x = 0;
+var top_y = popShift;
+var bottom_x = 0;
+var bottom_y = -popShift;
+var left_x = popShift;
+var left_y = 0;
+var right_x = -popShift;
+var right_y = 0;
+var top_left_x = popShift;
+var top_left_y = popShift;
+var top_right_x = -popShift;
+var top_right_y = popShift;
+var bottom_left_x = popShift;
+var bottom_left_y = -popShift;
+var bottom_right_x = -popShift;
+var bottom_right_y = -popShift;
+
+// -----------------------------------------------------------------------------
 // SCHOOL ARRAY MAPPING (array `s`)
 // -----------------------------------------------------------------------------
 
@@ -120,8 +143,6 @@ var iconlist = [{'name': 'college4', 'file': 'college-4-512.png'},
 		{'name': 'college2', 'file': 'college-2-512.png'},
 		{'name': 'schoolna', 'file': 'school-512.png'},
 		{'name': 'schoolad', 'file': 'school-adv-512.png'},
-		// {'name': 'schoolnanoc', 'file': 'school-noc-bg.png'},
-		// {'name': 'schooladnoc', 'file': 'school-advising-noc-bg.png'},
 		{'name': 'community', 'file': 'community-512.png'},
 		{'name': 'transparent', 'file': 'transparent.png'}];
 

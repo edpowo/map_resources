@@ -39,7 +39,7 @@ body {
 
 // landscape
 $map-height-landscape: 100%;
-$map-width-landscape-sm: 74%;
+$map-width-landscape-sm: 70%;
 $map-width-landscape-md: 71%;
 $map-width-landscape-lg: 75%;
 
@@ -52,6 +52,9 @@ $map-height-portrait-lg: 70%;
 // ...these are the same; new var for clarity
 $col-height-landscape: $map-height-landscape;
 $col-width-portrait: $map-width-portrait;
+
+// instructions left-right padding
+$instructions-lr-padding: 1rem;
 
 .col-map {
     position: absolute;
@@ -128,7 +131,6 @@ $col-width-portrait: $map-width-portrait;
     min-height: $header-min-px-sm;
     width: 100%;
     background: $header-background;
-    // border-bottom: 5px solid $header-bottom-line-color;
     color: $header-color;
     display: flex;
     align-items: center;
@@ -261,11 +263,12 @@ $col-width-portrait: $map-width-portrait;
 #instructions {
     position: absolute;
     visibility: visible;
-    padding: 0 1rem;
+    padding: 0 $instructions-lr-padding;
     left: 0;
     height: 90%;
     overflow: auto;
     max-height: calc(98% - #{$header-min-px-sm} - #{$footer-min-px-sm});
+    max-width: calc(100% - 2*#{$instructions-lr-padding});
     img {
 	margin-right: 1rem;
 	vertical-align: middle;
@@ -287,7 +290,19 @@ $col-width-portrait: $map-width-portrait;
     }
     &.bottom {
 	table {
-	    width: 75%;
+	    table-layout: fixed;
+	    @include landscape {
+		width: 100%;
+		@include medium {
+		    width: 80%;
+		}
+		@include large {
+		    width: 75%;
+		}
+	    }
+	    @include portrait {
+		width: 75%;
+	    }
 	}
 	td {
 	    text-align: center;
@@ -401,13 +416,13 @@ table {
     -webkit-filter: drop-shadow(5px 5px 10px rgba(0,0,0,0.8));
     filter: drop-shadow(5px 5px 10px rgba(0,0,0,0.8));
     background: $popup-background;
-    transform: scale(0.7);
-    @include medium {
-	transform: scale(.9);
-    }
-    @include large {
-	transform: scale(1);
-    }
+    // transform: scale(0.7);
+    // @include medium {
+    // 	transform: scale(0.9);
+    // }
+    // @include large {
+    // 	transform: scale(1);
+    // }
     h2 {
 	color: $popup-header-color;
 	text-align: center;
@@ -432,19 +447,51 @@ table {
     }
 }
 
-// kludge b/c tooltip point isn't connected directly to scaled content...buh
-.mapboxgl-popup-tip {
-    margin-bottom: 1rem;
-    margin-top: -1.3rem;
-    @include medium {
-	margin-bottom: 3rem;
-	margin-top: -.5rem;
-    }
-    @include large {
-	margin-bottom: 4rem;
-	margin-top: 0;
+.mapboxgl-popup-anchor-top {
+    > div.mapboxgl-popup-tip {
+	border-bottom-color: $jeffblue;
     }
 }
+.mapboxgl-popup-anchor-top-left {
+    > div.mapboxgl-popup-tip {
+	border-bottom-color: $jeffblue;
+    }
+    > div.mapboxgl-popup-content .pu-header {
+	border-top-left-radius: 0px;
+    }
+}
+.mapboxgl-popup-anchor-top-right {
+    > div.mapboxgl-popup-tip {
+	border-bottom-color: $jeffblue;
+    }
+    > div.mapboxgl-popup-content .pu-header {
+	border-top-right-radius: 0px;
+    }
+}
+
+// kludge b/c tooltip point isn't connected directly to scaled content...buh
+// .mapboxgl-popup-tip {
+//     margin-bottom: 1rem;
+//     margin-top: -1.3rem;
+//     @include medium {
+// 	margin-bottom: 3rem;
+// 	margin-top: -.5rem;
+//     }
+//     @include large {
+// 	margin-bottom: 4rem;
+// 	margin-top: 0;
+//     }
+// }
+
+// .mapboxgl-popup-anchor-bottom {
+//     transform: scale(0.7);
+//     @include medium {
+// 	transform: scale(0.9);
+//     }
+//     @include large {
+// 	transform: scale(1);
+//     }
+// }
 
 // -----------------------------------------------------------------------------
 // icons
