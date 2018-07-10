@@ -41,16 +41,33 @@ custom_js:
 	
 	</div>
 	<br/>
+	<div class='legend top'>
 		<h3>Legend</h3>
-		<p><img src='{{ site.images }}/school-32.png'>High school</p>
-		<p><img src='{{ site.images }}/school-adv-32.png'>High school with advising resource</p>
-		<p><img src='{{ site.images }}/college-2-32.png'>Two-year college</p>
-		<p><img src='{{ site.images }}/college-4-32.png'>Four-year college</p>
-		<p><img src='{{ site.images }}/community-32.png'>Community-based advising organization</p>
+		<p><img src='{{ site.images }}/school-512.png'>High school</p>
+		<p><img src='{{ site.images }}/school-adv-512.png'>High school with advising resource</p>
+		<p><img src='{{ site.images }}/college-2-512.png'>Two-year college</p>
+		<p><img src='{{ site.images }}/college-4-512.png'>Four-year college</p>
+		<p><img src='{{ site.images }}/community-512.png'>Community-based advising organization</p>
+	</div>
+	<br/>
+	<div class='legend bottom'>
+	<p><i>High school icon size increases as <b>counselor to student ratio</b> increases</i></p>
+	    <table>
+		<tr>
+		<td><img src='{{ site.images }}/school-512.png' style="width:30%"></td> 
+		<td><img src='{{ site.images }}/school-512.png' style="width:40%"></td>
+		<td><img src='{{ site.images }}/school-512.png' style="width:50%"></td>
+		<td><img src='{{ site.images }}/school-512.png' style="width:60%"></td> 
+		<td><img src='{{ site.images }}/school-512.png' style="width:70%"></td>
+		<td><img src='{{ site.images }}/school-512.png' style="width:80%"></td> 
+		<td><img src='{{ site.images }}/school-512.png' style="width:90%"></td> 
+		</tr> 
+		</table>
+	</div>
 		<!-- Hack to make sure scroll for full legend -->
 	<br/>
 	<br/>
-	
+	<br/>	
 	    </div>
 		<div class='col-list'>
 		
