@@ -238,6 +238,13 @@ body {
     #instructions {
       max-height: calc(98% - 50px - 40px); } }
 
+.legend.top img {
+  width: 8%; }
+.legend.bottom table {
+  width: 75%; }
+.legend.bottom td {
+  text-align: center; }
+
 #toggle {
   background: white;
   position: absolute;
