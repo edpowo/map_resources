@@ -1,6 +1,6 @@
 title:		Mapping College Resources
-github:		https://github.com/edpowo/map_resources	
-site:		https://edpowo.github.io
+github:		https://github.com/nudge4/map_resources	
+site:		https://nudge4.github.io
 baseurl: 	'.'
 
 # mapboxgl-js version
