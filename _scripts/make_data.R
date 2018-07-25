@@ -289,6 +289,9 @@ geojson_write(input = dfsp_icon, file = file.path(ddir, 'icon.geojson'))
 ## write all data as minified JS
 writeJSArray(df, 's', letters[1:14], file.path(jdir, 'all_icon_array.js'))
 
+## for tileset
+geojson_write(input = df, file = file.path(ddir, 'full_data.geojson'))
+
 ## -------------------------------------
 ## CSV
 ## -------------------------------------
